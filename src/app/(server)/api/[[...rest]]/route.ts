@@ -18,6 +18,9 @@ import { quizAttemptRouter } from "@/lib/api/routers/quiz-attempt";
 import { quizResponseRouter } from "@/lib/api/routers/quiz-response";
 import { gradeRouter } from "@/lib/api/routers/grade";
 import { sectionRouter } from "@/lib/api/routers/section";
+import { assessmentRouter } from "@/lib/api/routers/assessment";
+import { studentAssessmentGradeRouter } from "@/lib/api/routers/student-assessment-grade";
+import { courseFinalGradeRouter } from "@/lib/api/routers/course-final-grade";
 
 const apiHandler = new OpenAPIHandler(
   {
@@ -36,6 +39,9 @@ const apiHandler = new OpenAPIHandler(
     quizResponse: quizResponseRouter,
     grade: gradeRouter,
     section: sectionRouter,
+    assessment: assessmentRouter,
+    studentAssessmentGrade: studentAssessmentGradeRouter,
+    courseFinalGrade: courseFinalGradeRouter,
   },
   {
     plugins: [

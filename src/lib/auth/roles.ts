@@ -21,6 +21,9 @@ const statement = {
   question: ["create", "update", "delete"],
   quiz_attempt: ["create", "update", "delete"],
   quiz_response: ["create", "update", "delete"],
+  assessment: ["create", "update", "delete"],
+  student_assessment_grade: ["create", "update", "delete"],
+  course_final_grade: ["create", "update", "delete"],
 } as const;
 export const ac = createAccessControl(statement);
 
@@ -42,6 +45,9 @@ const superadmin = ac.newRole({
   question: ["create", "delete", "update"],
   quiz_attempt: ["create", "delete", "update"],
   quiz_response: ["create", "delete", "update"],
+  assessment: ["create", "delete", "update"],
+  student_assessment_grade: ["create", "delete", "update"],
+  course_final_grade: ["create", "delete", "update"],
 });
 
 const admin = ac.newRole({
@@ -62,6 +68,9 @@ const admin = ac.newRole({
   question: ["create", "delete", "update"],
   quiz_attempt: ["create", "delete", "update"],
   quiz_response: ["create", "delete", "update"],
+  assessment: ["create", "delete", "update"],
+  student_assessment_grade: ["create", "delete", "update"],
+  course_final_grade: ["create", "delete", "update"],
 });
 
 const teacher = ac.newRole({
@@ -86,6 +95,9 @@ const teacher = ac.newRole({
   question: ["create", "update"],
   quiz_attempt: ["create", "update"],
   quiz_response: ["create", "update"],
+  assessment: ["create", "update"],
+  student_assessment_grade: ["create", "update"],
+  course_final_grade: ["create", "update"],
 });
 
 const parent = ac.newRole({
