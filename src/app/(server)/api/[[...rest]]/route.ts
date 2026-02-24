@@ -50,7 +50,7 @@ const apiHandler = new OpenAPIHandler(
         schemaConverters: [new ZodToJsonSchemaConverter()],
         specGenerateOptions: {
           info: {
-            title: "Acontia API",
+            title: "Student API",
             version: "1.0.0",
           },
         },
