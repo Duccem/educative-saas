@@ -5,11 +5,13 @@ import { onError } from "@orpc/server";
 import { NextRequest } from "next/server";
 import { subjectRouter } from "@/lib/api/routers/subject";
 import { academicTermRouter } from "@/lib/api/routers/academic-term";
+import { courseRouter } from "@/lib/api/routers/course";
 
 const apiHandler = new OpenAPIHandler(
   {
     subject: subjectRouter,
     academicTerm: academicTermRouter,
+    course: courseRouter,
   },
   {
     plugins: [

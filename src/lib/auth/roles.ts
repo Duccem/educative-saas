@@ -7,6 +7,7 @@ const statement = {
   ...defaultStatements,
   subject: ["create", "update", "delete"],
   academic_term: ["create", "update", "delete"],
+  course: ["create", "update", "delete"],
 } as const;
 export const ac = createAccessControl(statement);
 
@@ -14,12 +15,14 @@ const superadmin = ac.newRole({
   ...adminAc.statements,
   subject: ["create", "delete", "update"],
   academic_term: ["create", "delete", "update"],
+  course: ["create", "delete", "update"],
 });
 
 const admin = ac.newRole({
   ...adminAc.statements,
   subject: ["create", "delete", "update"],
   academic_term: ["create", "delete", "update"],
+  course: ["create", "delete", "update"],
 });
 
 const teacher = ac.newRole({
@@ -30,6 +33,7 @@ const teacher = ac.newRole({
   ac: [],
   subject: ["create", "update"],
   academic_term: ["create", "update"],
+  course: ["create", "update"],
 });
 
 const parent = ac.newRole({
