@@ -8,6 +8,8 @@ const statement = {
   subject: ["create", "update", "delete"],
   academic_term: ["create", "update", "delete"],
   course: ["create", "update", "delete"],
+  module: ["create", "update", "delete"],
+  lesson: ["create", "update", "delete"],
 } as const;
 export const ac = createAccessControl(statement);
 
@@ -16,6 +18,8 @@ const superadmin = ac.newRole({
   subject: ["create", "delete", "update"],
   academic_term: ["create", "delete", "update"],
   course: ["create", "delete", "update"],
+  module: ["create", "delete", "update"],
+  lesson: ["create", "delete", "update"],
 });
 
 const admin = ac.newRole({
@@ -23,6 +27,8 @@ const admin = ac.newRole({
   subject: ["create", "delete", "update"],
   academic_term: ["create", "delete", "update"],
   course: ["create", "delete", "update"],
+  module: ["create", "delete", "update"],
+  lesson: ["create", "delete", "update"],
 });
 
 const teacher = ac.newRole({
@@ -34,6 +40,8 @@ const teacher = ac.newRole({
   subject: ["create", "update"],
   academic_term: ["create", "update"],
   course: ["create", "update"],
+  module: ["create", "update"],
+  lesson: ["create", "update"],
 });
 
 const parent = ac.newRole({

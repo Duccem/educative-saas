@@ -6,12 +6,16 @@ import { NextRequest } from "next/server";
 import { subjectRouter } from "@/lib/api/routers/subject";
 import { academicTermRouter } from "@/lib/api/routers/academic-term";
 import { courseRouter } from "@/lib/api/routers/course";
+import { moduleRouter } from "@/lib/api/routers/module";
+import { lessonRouter } from "@/lib/api/routers/lesson";
 
 const apiHandler = new OpenAPIHandler(
   {
     subject: subjectRouter,
     academicTerm: academicTermRouter,
     course: courseRouter,
+    module: moduleRouter,
+    lesson: lessonRouter,
   },
   {
     plugins: [
