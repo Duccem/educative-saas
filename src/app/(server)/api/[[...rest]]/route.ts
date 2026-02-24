@@ -4,10 +4,12 @@ import { ZodToJsonSchemaConverter } from "@orpc/zod/zod4";
 import { onError } from "@orpc/server";
 import { NextRequest } from "next/server";
 import { subjectRouter } from "@/lib/api/routers/subject";
+import { academicTermRouter } from "@/lib/api/routers/academic-term";
 
 const apiHandler = new OpenAPIHandler(
   {
     subject: subjectRouter,
+    academicTerm: academicTermRouter,
   },
   {
     plugins: [
