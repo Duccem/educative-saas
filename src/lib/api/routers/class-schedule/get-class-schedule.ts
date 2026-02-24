@@ -33,9 +33,7 @@ export const getClassSchedule = protectedProcedure
       });
     }
 
-    if (
-      existingClassSchedule.course.organization_id !== context.organization.id
-    ) {
+    if (existingClassSchedule.organization_id !== context.organization.id) {
       throw new ORPCError("NOT_FOUND", {
         cause: "Class schedule not found",
       });

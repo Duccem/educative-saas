@@ -10,7 +10,10 @@ import {
 
 const listClassAttendanceInput = z.object({
   query: z.object({
-    term: z.string().optional(),
+    status: z.string().optional(),
+    student_id: z.string().optional(),
+    schedule_id: z.string().optional(),
+    course_id: z.string().optional(),
     page: z.coerce.number().int().positive().default(1),
     pageSize: z.coerce.number().int().positive().max(100).default(10),
   }),
@@ -24,49 +27,28 @@ export const listClassAttendance = protectedProcedure
   })
   .input(listClassAttendanceInput)
   .handler(async ({ input: { query }, context }) => {
-    const { term, page, pageSize } = query;
+    const { status, student_id, schedule_id, course_id, page, pageSize } =
+      query;
     const offset = (page - 1) * pageSize;
 
-    const organizationCourses = await database.query.course.findMany({
-      where: eq(course.organization_id, context.organization.id),
-      columns: { id: true },
-    });
-
-    const courseIds = organizationCourses.map((item) => item.id);
-
-    if (courseIds.length === 0) {
-      return {
-        items: [],
-        total: 0,
-        page,
-        pageSize,
-      };
-    }
-
-    const organizationSchedules = await database.query.class_schedule.findMany({
-      where: inArray(class_schedule.course_id, courseIds),
-      columns: { id: true },
-    });
-
-    const scheduleIds = organizationSchedules.map((item) => item.id);
-
-    if (scheduleIds.length === 0) {
-      return {
-        items: [],
-        total: 0,
-        page,
-        pageSize,
-      };
-    }
-
     const condition: SQL<unknown>[] = [
-      inArray(class_attendance.class_schedule_id, scheduleIds),
+      eq(class_attendance.organization_id, context.organization.id),
     ];
 
-    if (term) {
-      condition.push(
-        ilike(class_attendance.status, `%${term}%`) as SQL<unknown>,
-      );
+    if (status) {
+      condition.push(eq(class_attendance.status, status));
+    }
+
+    if (student_id) {
+      condition.push(eq(class_attendance.student_id, student_id));
+    }
+
+    if (schedule_id) {
+      condition.push(eq(class_attendance.class_schedule_id, schedule_id));
+    }
+
+    if (course_id) {
+      condition.push(eq(class_attendance.course_id, course_id));
     }
 
     const [items, total] = await Promise.all([
@@ -74,15 +56,6 @@ export const listClassAttendance = protectedProcedure
         where: and(...condition),
         limit: pageSize,
         offset,
-        with: {
-          schedule: {
-            with: {
-              course: true,
-              classroom: true,
-            },
-          },
-          student: true,
-        },
       }),
       database
         .select({ count: count(class_attendance.id) })

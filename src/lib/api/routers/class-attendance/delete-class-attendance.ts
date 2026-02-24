@@ -52,12 +52,9 @@ export const deleteClassAttendance = protectedProcedure
       });
     }
 
-    if (
-      existingClassAttendance.schedule.course.organization_id !==
-      context.organization.id
-    ) {
-      throw new ORPCError("NOT_FOUND", {
-        cause: "Class attendance not found",
+    if (existingClassAttendance.organization_id !== context.organization.id) {
+      throw new ORPCError("UNAUTHORIZED", {
+        cause: "You do not have permission to delete this class attendance",
       });
     }
 

@@ -44,10 +44,7 @@ export const updateClassAttendance = protectedProcedure
       });
     }
 
-    if (
-      existingClassAttendance.schedule.course.organization_id !==
-      context.organization.id
-    ) {
+    if (existingClassAttendance.organization_id !== context.organization.id) {
       throw new ORPCError("NOT_FOUND", {
         cause: "Class attendance not found",
       });
@@ -84,11 +81,9 @@ export const updateClassAttendance = protectedProcedure
         });
       }
 
-      if (
-        targetClassSchedule.course.organization_id !== context.organization.id
-      ) {
-        throw new ORPCError("NOT_FOUND", {
-          cause: "Class schedule not found",
+      if (targetClassSchedule.organization_id !== context.organization.id) {
+        throw new ORPCError("UNAUTHORIZED", {
+          cause: "You do not have permission to assign this class schedule",
         });
       }
     }

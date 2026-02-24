@@ -61,6 +61,9 @@ export const enrollment = pgTable("enrollment", {
   student_id: uuid("student_id")
     .notNull()
     .references(() => user.id),
+  organization_id: uuid("organization_id")
+    .notNull()
+    .references(() => organization.id),
   status: enrollment_status("status").notNull().default("active"),
 });
 

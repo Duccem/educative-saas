@@ -1,12 +1,14 @@
 import z from "zod";
 import { protectedProcedure } from "../..";
 import { database } from "@/lib/database";
-import { and, count, eq, inArray, ilike, SQL } from "drizzle-orm";
-import { class_schedule, course } from "@/lib/database/schema";
+import { and, count, eq, inArray, ilike, SQL, gte } from "drizzle-orm";
+import { class_schedule, classroom, course } from "@/lib/database/schema";
 
 const listClassSchedulesInput = z.object({
   query: z.object({
-    term: z.string().optional(),
+    hour: z.string().optional(),
+    course_id: z.string().optional(),
+    classroom_id: z.string().optional(),
     page: z.coerce.number().int().positive().default(1),
     pageSize: z.coerce.number().int().positive().max(100).default(10),
   }),
@@ -20,33 +22,23 @@ export const listClassSchedules = protectedProcedure
   })
   .input(listClassSchedulesInput)
   .handler(async ({ input: { query }, context }) => {
-    const { term, page, pageSize } = query;
+    const { hour, course_id, classroom_id, page, pageSize } = query;
     const offset = (page - 1) * pageSize;
 
-    const organizationCourses = await database.query.course.findMany({
-      where: eq(course.organization_id, context.organization.id),
-      columns: { id: true },
-    });
-
-    const courseIds = organizationCourses.map((item) => item.id);
-
-    if (courseIds.length === 0) {
-      return {
-        items: [],
-        total: 0,
-        page,
-        pageSize,
-      };
-    }
-
     const condition: SQL<unknown>[] = [
-      inArray(class_schedule.course_id, courseIds),
+      eq(class_schedule.organization_id, context.organization.id),
     ];
 
-    if (term) {
-      condition.push(
-        ilike(class_schedule.start_time, `%${term}%`) as SQL<unknown>,
-      );
+    if (hour) {
+      condition.push(eq(class_schedule.start_time, hour));
+    }
+
+    if (course_id) {
+      condition.push(eq(class_schedule.course_id, course_id));
+    }
+
+    if (classroom_id) {
+      condition.push(eq(class_schedule.classroom_id, classroom_id));
     }
 
     const [items, total] = await Promise.all([

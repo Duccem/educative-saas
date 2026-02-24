@@ -13,21 +13,10 @@ async function getStudentScheduleById(
   studentId: string,
   organizationId: string,
 ) {
-  const organizationCourses = await database.query.course.findMany({
-    where: eq(course.organization_id, organizationId),
-    columns: { id: true },
-  });
-
-  const courseIds = organizationCourses.map((item) => item.id);
-
-  if (courseIds.length === 0) {
-    return [];
-  }
-
   const studentEnrollments = await database.query.enrollment.findMany({
     where: and(
       eq(enrollment.student_id, studentId),
-      inArray(enrollment.course_id, courseIds),
+      eq(enrollment.organization_id, organizationId),
     ),
     columns: { course_id: true },
   });

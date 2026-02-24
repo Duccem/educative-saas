@@ -13,7 +13,7 @@ const updateClassScheduleInputSchema = z.object({
   body: z.object({
     course_id: z.uuid().optional(),
     classroom_id: z.uuid().optional(),
-    day_of_week: z.coerce.number().int().min(0).max(6).optional(),
+    day_of_week: z.string().optional(),
     start_time: z.string().regex(hourRegex).optional(),
     end_time: z.string().regex(hourRegex).optional(),
   }),
@@ -43,11 +43,9 @@ export const updateClassSchedule = protectedProcedure
       });
     }
 
-    if (
-      existingClassSchedule.course.organization_id !== context.organization.id
-    ) {
-      throw new ORPCError("NOT_FOUND", {
-        cause: "Class schedule not found",
+    if (existingClassSchedule.organization_id !== context.organization.id) {
+      throw new ORPCError("UNAUTHORIZED", {
+        cause: "You do not have permission to update this class schedule",
       });
     }
 

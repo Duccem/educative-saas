@@ -67,6 +67,8 @@ export const addClassAttendance = protectedProcedure
       student_id: body.student_id,
       attendance_date: body.attendance_date,
       status: body.status,
+      organization_id: context.organization.id,
+      course_id: existingClassSchedule.course_id,
     });
 
     return {

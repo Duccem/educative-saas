@@ -1,5 +1,12 @@
 import { relations } from "drizzle-orm";
-import { boolean, integer, pgTable, text, uuid } from "drizzle-orm/pg-core";
+import {
+  boolean,
+  integer,
+  pgTable,
+  text,
+  uuid,
+  time,
+} from "drizzle-orm/pg-core";
 import { v7 } from "uuid";
 import { organization, user } from "./auth";
 import { course } from "./course";
@@ -19,10 +26,13 @@ export const class_schedule = pgTable("class_schedule", {
   course_id: uuid("course_id")
     .notNull()
     .references(() => course.id),
+  organization_id: uuid("organization_id")
+    .notNull()
+    .references(() => organization.id),
   classroom_id: uuid("classroom_id")
     .notNull()
     .references(() => classroom.id),
-  day_of_week: integer("day_of_week").notNull(), // 0 (Sunday) to 6 (Saturday)
+  day_of_week: text("day_of_week").notNull(), // 0 (Sunday) to 6 (Saturday)
   start_time: text("start_time").notNull(), // Format: "HH:MM"
   end_time: text("end_time").notNull(), // Format: "HH:MM"
 });
@@ -32,6 +42,12 @@ export const class_attendance = pgTable("class_attendance", {
   class_schedule_id: uuid("class_schedule_id")
     .notNull()
     .references(() => class_schedule.id),
+  course_id: uuid("course_id")
+    .notNull()
+    .references(() => course.id),
+  organization_id: uuid("organization_id")
+    .notNull()
+    .references(() => organization.id),
   student_id: uuid("student_id")
     .notNull()
     .references(() => user.id),

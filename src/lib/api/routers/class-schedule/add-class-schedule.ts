@@ -12,7 +12,7 @@ const hourRegex = /^([01]\d|2[0-3]):[0-5]\d$/;
 const classScheduleInputSchema = z.object({
   course_id: z.uuid(),
   classroom_id: z.uuid(),
-  day_of_week: z.coerce.number().int().min(0).max(6),
+  day_of_week: z.string(),
   start_time: z.string().regex(hourRegex),
   end_time: z.string().regex(hourRegex),
 });
@@ -113,6 +113,7 @@ export const addClassSchedule = protectedProcedure
       day_of_week: body.day_of_week,
       start_time: body.start_time,
       end_time: body.end_time,
+      organization_id: context.organization.id,
     });
 
     return {
