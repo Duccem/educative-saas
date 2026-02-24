@@ -1,6 +1,7 @@
 import { relations } from "drizzle-orm";
 import {
   boolean,
+  integer,
   pgEnum,
   pgTable,
   text,
@@ -9,6 +10,29 @@ import {
 } from "drizzle-orm/pg-core";
 import { v7 } from "uuid";
 import { organization, user } from "./auth";
+
+export const grade = pgTable("grade", {
+  id: uuid("id").primaryKey().$defaultFn(v7),
+  organization_id: uuid("organization_id")
+    .notNull()
+    .references(() => organization.id),
+  name: text("name").notNull(),
+  level: integer("level"),
+  description: text("description"),
+});
+
+export const section = pgTable("section", {
+  id: uuid("id").primaryKey().$defaultFn(v7),
+  organization_id: uuid("organization_id")
+    .notNull()
+    .references(() => organization.id),
+  grade_id: uuid("grade_id")
+    .notNull()
+    .references(() => grade.id),
+  name: text("name").notNull(),
+  description: text("description"),
+  max_students: integer("max_students"),
+});
 
 export const academic_term = pgTable("academic_term", {
   id: uuid("id").primaryKey().$defaultFn(v7),
@@ -44,6 +68,8 @@ export const course = pgTable("course", {
   teacher_id: uuid("teacher_id")
     .notNull()
     .references(() => user.id),
+  grade_id: uuid("grade_id").references(() => grade.id),
+  section_id: uuid("section_id").references(() => section.id),
   name: text("name").notNull(),
 });
 
@@ -64,6 +90,21 @@ export const enrollment = pgTable("enrollment", {
   organization_id: uuid("organization_id")
     .notNull()
     .references(() => organization.id),
+  status: enrollment_status("status").notNull().default("active"),
+});
+
+export const section_enrollment = pgTable("section_enrollment", {
+  id: uuid("id").primaryKey().$defaultFn(v7),
+  section_id: uuid("section_id")
+    .notNull()
+    .references(() => section.id),
+  student_id: uuid("student_id")
+    .notNull()
+    .references(() => user.id),
+  organization_id: uuid("organization_id")
+    .notNull()
+    .references(() => organization.id),
+
   status: enrollment_status("status").notNull().default("active"),
 });
 
@@ -90,6 +131,27 @@ export const academicTermRelations = relations(
   }),
 );
 
+export const gradeRelations = relations(grade, ({ one, many }) => ({
+  organization: one(organization, {
+    fields: [grade.organization_id],
+    references: [organization.id],
+  }),
+  sections: many(section),
+  courses: many(course),
+}));
+
+export const sectionRelations = relations(section, ({ one, many }) => ({
+  organization: one(organization, {
+    fields: [section.organization_id],
+    references: [organization.id],
+  }),
+  grade: one(grade, {
+    fields: [section.grade_id],
+    references: [grade.id],
+  }),
+  courses: many(course),
+}));
+
 export const subjectRelations = relations(subject, ({ one, many }) => ({
   courses: many(course),
 }));
@@ -110,6 +172,14 @@ export const courseRelations = relations(course, ({ one, many }) => ({
   teacher: one(user, {
     fields: [course.teacher_id],
     references: [user.id],
+  }),
+  grade: one(grade, {
+    fields: [course.grade_id],
+    references: [grade.id],
+  }),
+  section: one(section, {
+    fields: [course.section_id],
+    references: [section.id],
   }),
   enrollments: many(enrollment),
 }));
