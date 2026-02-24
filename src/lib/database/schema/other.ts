@@ -1,6 +1,6 @@
+import { relations } from "drizzle-orm";
 import { pgTable, uuid } from "drizzle-orm/pg-core";
 import { organization, user } from "./auth";
-import { subject } from "./course";
 
 export const parent_student = pgTable("parent_student", {
   organization_id: uuid("organization_id")
@@ -14,15 +14,20 @@ export const parent_student = pgTable("parent_student", {
     .references(() => user.id),
 });
 
-export const teacher_subject = pgTable("teacher_subject", {
-  organization_id: uuid("organization_id")
-    .notNull()
-    .references(() => organization.id),
-  teacher_id: uuid("teacher_id")
-    .notNull()
-    .references(() => user.id),
-  subject_id: uuid("subject_id")
-    .notNull()
-    .references(() => subject.id),
-});
+export const parentStudentRelations = relations(parent_student, ({ one }) => ({
+  organization: one(organization, {
+    fields: [parent_student.organization_id],
+    references: [organization.id],
+  }),
+  parent: one(user, {
+    fields: [parent_student.parent_id],
+    references: [user.id],
+    relationName: "parent_student_parent",
+  }),
+  student: one(user, {
+    fields: [parent_student.student_id],
+    references: [user.id],
+    relationName: "parent_student_student",
+  }),
+}));
 

@@ -1,3 +1,4 @@
+import { relations } from "drizzle-orm";
 import {
   boolean,
   pgEnum,
@@ -63,3 +64,83 @@ export const enrollment = pgTable("enrollment", {
   status: enrollment_status("status").notNull().default("active"),
 });
 
+export const teacher_subject = pgTable("teacher_subject", {
+  organization_id: uuid("organization_id")
+    .notNull()
+    .references(() => organization.id),
+  teacher_id: uuid("teacher_id")
+    .notNull()
+    .references(() => user.id),
+  subject_id: uuid("subject_id")
+    .notNull()
+    .references(() => subject.id),
+});
+
+export const academicTermRelations = relations(
+  academic_term,
+  ({ one, many }) => ({
+    organization: one(organization, {
+      fields: [academic_term.organization_id],
+      references: [organization.id],
+    }),
+    subjects: many(subject),
+    courses: many(course),
+  }),
+);
+
+export const subjectRelations = relations(subject, ({ one, many }) => ({
+  academicTerm: one(academic_term, {
+    fields: [subject.academic_term_id],
+    references: [academic_term.id],
+  }),
+  courses: many(course),
+}));
+
+export const courseRelations = relations(course, ({ one, many }) => ({
+  subject: one(subject, {
+    fields: [course.subject_id],
+    references: [subject.id],
+  }),
+  academicTerm: one(academic_term, {
+    fields: [course.academic_term_id],
+    references: [academic_term.id],
+  }),
+  organization: one(organization, {
+    fields: [course.organization_id],
+    references: [organization.id],
+  }),
+  teacher: one(user, {
+    fields: [course.teacher_id],
+    references: [user.id],
+  }),
+  enrollments: many(enrollment),
+}));
+
+export const enrollmentRelations = relations(enrollment, ({ one }) => ({
+  course: one(course, {
+    fields: [enrollment.course_id],
+    references: [course.id],
+  }),
+  student: one(user, {
+    fields: [enrollment.student_id],
+    references: [user.id],
+  }),
+}));
+
+export const teacherSubjectRelations = relations(
+  teacher_subject,
+  ({ one }) => ({
+    organization: one(organization, {
+      fields: [teacher_subject.organization_id],
+      references: [organization.id],
+    }),
+    teacher: one(user, {
+      fields: [teacher_subject.teacher_id],
+      references: [user.id],
+    }),
+    subject: one(subject, {
+      fields: [teacher_subject.subject_id],
+      references: [subject.id],
+    }),
+  }),
+);

@@ -1,3 +1,4 @@
+import { relations } from "drizzle-orm";
 import {
   decimal,
   integer,
@@ -7,6 +8,7 @@ import {
   uuid,
 } from "drizzle-orm/pg-core";
 import { v7 } from "uuid";
+import { user } from "./auth";
 import { course } from "./course";
 
 export const quiz = pgTable("quiz", {
@@ -52,4 +54,47 @@ export const quiz_response = pgTable("quiz_response", {
     .references(() => question.id),
   selected_option: integer("selected_option").notNull(),
 });
+
+export const quizRelations = relations(quiz, ({ one, many }) => ({
+  course: one(course, {
+    fields: [quiz.course_id],
+    references: [course.id],
+  }),
+  questions: many(question),
+  attempts: many(quiz_attempt),
+}));
+
+export const questionRelations = relations(question, ({ one, many }) => ({
+  quiz: one(quiz, {
+    fields: [question.quiz_id],
+    references: [quiz.id],
+  }),
+  responses: many(quiz_response),
+}));
+
+export const quizAttemptRelations = relations(
+  quiz_attempt,
+  ({ one, many }) => ({
+    quiz: one(quiz, {
+      fields: [quiz_attempt.quiz_id],
+      references: [quiz.id],
+    }),
+    student: one(user, {
+      fields: [quiz_attempt.student_id],
+      references: [user.id],
+    }),
+    responses: many(quiz_response),
+  }),
+);
+
+export const quizResponseRelations = relations(quiz_response, ({ one }) => ({
+  attempt: one(quiz_attempt, {
+    fields: [quiz_response.quiz_attempt_id],
+    references: [quiz_attempt.id],
+  }),
+  question: one(question, {
+    fields: [quiz_response.question_id],
+    references: [question.id],
+  }),
+}));
 

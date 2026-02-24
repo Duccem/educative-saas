@@ -1,3 +1,4 @@
+import { relations } from "drizzle-orm";
 import { integer, pgEnum, pgTable, text, uuid } from "drizzle-orm/pg-core";
 import { v7 } from "uuid";
 import { course } from "./course";
@@ -24,4 +25,19 @@ export const lesson = pgTable("lesson", {
   body: text("body"),
   order: integer("order").notNull(),
 });
+
+export const moduleRelations = relations(module, ({ one, many }) => ({
+  course: one(course, {
+    fields: [module.course_id],
+    references: [course.id],
+  }),
+  lessons: many(lesson),
+}));
+
+export const lessonRelations = relations(lesson, ({ one }) => ({
+  module: one(module, {
+    fields: [lesson.module_id],
+    references: [module.id],
+  }),
+}));
 
