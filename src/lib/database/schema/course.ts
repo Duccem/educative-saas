@@ -1,6 +1,7 @@
 import { relations } from "drizzle-orm";
 import {
   boolean,
+  decimal,
   integer,
   pgEnum,
   pgTable,
@@ -91,6 +92,10 @@ export const enrollment = pgTable("enrollment", {
     .notNull()
     .references(() => organization.id),
   status: enrollment_status("status").notNull().default("active"),
+  final_score: decimal("final_score", { precision: 8, scale: 2 }),
+  final_letter: text("final_letter"),
+  is_passing: boolean("is_passing").notNull().default(false),
+  finalized_at: timestamp("finalized_at"),
 });
 
 export const section_enrollment = pgTable("section_enrollment", {
