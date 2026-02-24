@@ -1,4 +1,11 @@
-import { boolean, pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
+import {
+  boolean,
+  pgEnum,
+  pgTable,
+  text,
+  timestamp,
+  uuid,
+} from "drizzle-orm/pg-core";
 import { v7 } from "uuid";
 import { organization, user } from "./auth";
 
@@ -37,5 +44,22 @@ export const course = pgTable("course", {
     .notNull()
     .references(() => user.id),
   name: text("name").notNull(),
+});
+
+export const enrollment_status = pgEnum("enrollment_status", [
+  "active",
+  "completed",
+  "dropped",
+]);
+
+export const enrollment = pgTable("enrollment", {
+  id: uuid("id").primaryKey().$defaultFn(v7),
+  course_id: uuid("course_id")
+    .notNull()
+    .references(() => course.id),
+  student_id: uuid("student_id")
+    .notNull()
+    .references(() => user.id),
+  status: enrollment_status("status").notNull().default("active"),
 });
 
