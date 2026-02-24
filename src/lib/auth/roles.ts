@@ -15,6 +15,10 @@ const statement = {
   class_attendance: ["create", "update", "delete"],
   enrollment: ["create", "update", "delete"],
   parent_student: ["create", "update", "delete"],
+  quiz: ["create", "update", "delete"],
+  question: ["create", "update", "delete"],
+  quiz_attempt: ["create", "update", "delete"],
+  quiz_response: ["create", "update", "delete"],
 } as const;
 export const ac = createAccessControl(statement);
 
@@ -30,6 +34,10 @@ const superadmin = ac.newRole({
   class_attendance: ["create", "delete", "update"],
   enrollment: ["create", "delete", "update"],
   parent_student: ["create", "delete", "update"],
+  quiz: ["create", "delete", "update"],
+  question: ["create", "delete", "update"],
+  quiz_attempt: ["create", "delete", "update"],
+  quiz_response: ["create", "delete", "update"],
 });
 
 const admin = ac.newRole({
@@ -44,6 +52,10 @@ const admin = ac.newRole({
   class_attendance: ["create", "delete", "update"],
   enrollment: ["create", "delete", "update"],
   parent_student: ["create", "delete", "update"],
+  quiz: ["create", "delete", "update"],
+  question: ["create", "delete", "update"],
+  quiz_attempt: ["create", "delete", "update"],
+  quiz_response: ["create", "delete", "update"],
 });
 
 const teacher = ac.newRole({
@@ -62,6 +74,10 @@ const teacher = ac.newRole({
   class_attendance: ["create", "update"],
   enrollment: ["create", "update"],
   parent_student: ["create", "update"],
+  quiz: ["create", "update"],
+  question: ["create", "update"],
+  quiz_attempt: ["create", "update"],
+  quiz_response: ["create", "update"],
 });
 
 const parent = ac.newRole({
@@ -78,6 +94,8 @@ const student = ac.newRole({
   invitation: [],
   team: [],
   ac: [],
+  quiz_attempt: ["create"],
+  quiz_response: ["create"],
 });
 
 export const roles = {

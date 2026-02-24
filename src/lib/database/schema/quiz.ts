@@ -8,7 +8,7 @@ import {
   uuid,
 } from "drizzle-orm/pg-core";
 import { v7 } from "uuid";
-import { user } from "./auth";
+import { organization, user } from "./auth";
 import { course } from "./course";
 
 export const quiz = pgTable("quiz", {
@@ -16,6 +16,9 @@ export const quiz = pgTable("quiz", {
   course_id: uuid("course_id")
     .notNull()
     .references(() => course.id),
+  organization_id: uuid("organization_id")
+    .notNull()
+    .references(() => organization.id),
   title: text("title").notNull(),
   description: text("description"),
   weight: decimal("weight", { precision: 2 }).notNull().default("1.00"),
@@ -38,7 +41,12 @@ export const quiz_attempt = pgTable("quiz_attempt", {
   quiz_id: uuid("quiz_id")
     .notNull()
     .references(() => quiz.id),
-  student_id: uuid("student_id").notNull(),
+  student_id: uuid("student_id")
+    .notNull()
+    .references(() => user.id),
+  organization_id: uuid("organization_id")
+    .notNull()
+    .references(() => organization.id),
   score: decimal("score", { precision: 2 }).notNull().default("0.00"),
   feedback: text("feedback"),
   attempt_time: timestamp("attempt_time").notNull().defaultNow(),
@@ -49,6 +57,9 @@ export const quiz_response = pgTable("quiz_response", {
   quiz_attempt_id: uuid("quiz_attempt_id")
     .notNull()
     .references(() => quiz_attempt.id),
+  organization_id: uuid("organization_id")
+    .notNull()
+    .references(() => organization.id),
   question_id: uuid("question_id")
     .notNull()
     .references(() => question.id),

@@ -13,6 +13,9 @@ import { classScheduleRouter } from "@/lib/api/routers/class-schedule";
 import { classAttendanceRouter } from "@/lib/api/routers/class-attendance";
 import { enrollmentRouter } from "@/lib/api/routers/enrollment";
 import { parentStudentRouter } from "@/lib/api/routers/parent-student";
+import { quizRouter } from "@/lib/api/routers/quiz";
+import { quizAttemptRouter } from "@/lib/api/routers/quiz-attempt";
+import { quizResponseRouter } from "@/lib/api/routers/quiz-response";
 
 const apiHandler = new OpenAPIHandler(
   {
@@ -26,6 +29,9 @@ const apiHandler = new OpenAPIHandler(
     classAttendance: classAttendanceRouter,
     enrollment: enrollmentRouter,
     parentStudent: parentStudentRouter,
+    quiz: quizRouter,
+    quizAttempt: quizAttemptRouter,
+    quizResponse: quizResponseRouter,
   },
   {
     plugins: [
