@@ -8,6 +8,9 @@ import { academicTermRouter } from "@/lib/api/routers/academic-term";
 import { courseRouter } from "@/lib/api/routers/course";
 import { moduleRouter } from "@/lib/api/routers/module";
 import { lessonRouter } from "@/lib/api/routers/lesson";
+import { classroomRouter } from "@/lib/api/routers/classroom";
+import { classScheduleRouter } from "@/lib/api/routers/class-schedule";
+import { classAttendanceRouter } from "@/lib/api/routers/class-attendance";
 
 const apiHandler = new OpenAPIHandler(
   {
@@ -16,6 +19,9 @@ const apiHandler = new OpenAPIHandler(
     course: courseRouter,
     module: moduleRouter,
     lesson: lessonRouter,
+    classroom: classroomRouter,
+    classSchedule: classScheduleRouter,
+    classAttendance: classAttendanceRouter,
   },
   {
     plugins: [
