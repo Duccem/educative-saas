@@ -12,6 +12,7 @@ import { classroomRouter } from "@/lib/api/routers/classroom";
 import { classScheduleRouter } from "@/lib/api/routers/class-schedule";
 import { classAttendanceRouter } from "@/lib/api/routers/class-attendance";
 import { enrollmentRouter } from "@/lib/api/routers/enrollment";
+import { parentStudentRouter } from "@/lib/api/routers/parent-student";
 
 const apiHandler = new OpenAPIHandler(
   {
@@ -24,6 +25,7 @@ const apiHandler = new OpenAPIHandler(
     classSchedule: classScheduleRouter,
     classAttendance: classAttendanceRouter,
     enrollment: enrollmentRouter,
+    parentStudent: parentStudentRouter,
   },
   {
     plugins: [
