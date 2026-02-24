@@ -23,10 +23,10 @@ export const academic_term = pgTable("academic_term", {
 
 export const subject = pgTable("subject", {
   id: uuid("id").primaryKey().$defaultFn(v7),
-  academic_term_id: uuid("academic_term_id")
-    .notNull()
-    .references(() => academic_term.id),
   name: text("name").notNull(),
+  organization_id: uuid("organization_id")
+    .notNull()
+    .references(() => organization.id),
   description: text("description"),
 });
 
@@ -83,16 +83,11 @@ export const academicTermRelations = relations(
       fields: [academic_term.organization_id],
       references: [organization.id],
     }),
-    subjects: many(subject),
     courses: many(course),
   }),
 );
 
 export const subjectRelations = relations(subject, ({ one, many }) => ({
-  academicTerm: one(academic_term, {
-    fields: [subject.academic_term_id],
-    references: [academic_term.id],
-  }),
   courses: many(course),
 }));
 
@@ -144,3 +139,4 @@ export const teacherSubjectRelations = relations(
     }),
   }),
 );
+

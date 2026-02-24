@@ -3,9 +3,12 @@ import { OpenAPIReferencePlugin } from "@orpc/openapi/plugins";
 import { ZodToJsonSchemaConverter } from "@orpc/zod/zod4";
 import { onError } from "@orpc/server";
 import { NextRequest } from "next/server";
+import { subjectRouter } from "@/lib/api/routers/subject";
 
 const apiHandler = new OpenAPIHandler(
-  {},
+  {
+    subject: subjectRouter,
+  },
   {
     plugins: [
       new OpenAPIReferencePlugin({

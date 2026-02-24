@@ -5,15 +5,18 @@ import {
 } from "better-auth/plugins/organization/access";
 const statement = {
   ...defaultStatements,
+  subject: ["create", "update", "delete"],
 } as const;
 export const ac = createAccessControl(statement);
 
 const superadmin = ac.newRole({
-  ...statement,
+  ...adminAc.statements,
+  subject: ["create", "delete", "update"],
 });
 
 const admin = ac.newRole({
   ...adminAc.statements,
+  subject: ["create", "delete", "update"],
 });
 
 const teacher = ac.newRole({
@@ -22,6 +25,7 @@ const teacher = ac.newRole({
   invitation: [],
   team: [],
   ac: [],
+  subject: ["create", "update"],
 });
 
 const parent = ac.newRole({
