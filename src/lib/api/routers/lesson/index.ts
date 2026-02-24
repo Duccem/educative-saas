@@ -5,7 +5,7 @@ import { updateLesson } from "./update-lesson";
 import { listLessons } from "./list-lessons";
 import { getLesson } from "./get-lesson";
 
-export const lessonRouter = protectedProcedure.prefix("/public").router({
+export const lessonRouter = protectedProcedure.prefix("/lesson").router({
   addLesson,
   deleteLesson,
   updateLesson,

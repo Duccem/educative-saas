@@ -5,11 +5,13 @@ import { updateAcademicTerm } from "./update-academic-term";
 import { listAcademicTerms } from "./list-academic-terms";
 import { getAcademicTerm } from "./get-academic-term";
 
-export const academicTermRouter = protectedProcedure.prefix("/public").router({
-  addAcademicTerm,
-  deleteAcademicTerm,
-  updateAcademicTerm,
-  listAcademicTerms,
-  getAcademicTerm,
-});
+export const academicTermRouter = protectedProcedure
+  .prefix("/academic-term")
+  .router({
+    addAcademicTerm,
+    deleteAcademicTerm,
+    updateAcademicTerm,
+    listAcademicTerms,
+    getAcademicTerm,
+  });
 

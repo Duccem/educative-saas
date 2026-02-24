@@ -13,6 +13,7 @@ const statement = {
   classroom: ["create", "update", "delete"],
   class_schedule: ["create", "update", "delete"],
   class_attendance: ["create", "update", "delete"],
+  enrollment: ["create", "update", "delete"],
 } as const;
 export const ac = createAccessControl(statement);
 
@@ -26,6 +27,7 @@ const superadmin = ac.newRole({
   classroom: ["create", "delete", "update"],
   class_schedule: ["create", "delete", "update"],
   class_attendance: ["create", "delete", "update"],
+  enrollment: ["create", "delete", "update"],
 });
 
 const admin = ac.newRole({
@@ -38,6 +40,7 @@ const admin = ac.newRole({
   classroom: ["create", "delete", "update"],
   class_schedule: ["create", "delete", "update"],
   class_attendance: ["create", "delete", "update"],
+  enrollment: ["create", "delete", "update"],
 });
 
 const teacher = ac.newRole({
@@ -54,6 +57,7 @@ const teacher = ac.newRole({
   classroom: ["create", "update"],
   class_schedule: ["create", "update"],
   class_attendance: ["create", "update"],
+  enrollment: ["create", "update"],
 });
 
 const parent = ac.newRole({

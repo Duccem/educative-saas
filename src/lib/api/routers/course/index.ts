@@ -5,7 +5,7 @@ import { updateCourse } from "./update-course";
 import { listCourses } from "./list-courses";
 import { getCourse } from "./get-course";
 
-export const courseRouter = protectedProcedure.prefix("/public").router({
+export const courseRouter = protectedProcedure.prefix("/course").router({
   addCourse,
   deleteCourse,
   updateCourse,

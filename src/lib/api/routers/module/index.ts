@@ -5,7 +5,7 @@ import { updateModule } from "./update-module";
 import { listModules } from "./list-modules";
 import { getModule } from "./get-module";
 
-export const moduleRouter = protectedProcedure.prefix("/public").router({
+export const moduleRouter = protectedProcedure.prefix("/module").router({
   addModule,
   deleteModule,
   updateModule,

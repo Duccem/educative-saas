@@ -6,7 +6,7 @@ import { listClassAttendance } from "./list-class-attendance";
 import { getClassAttendance } from "./get-class-attendance";
 
 export const classAttendanceRouter = protectedProcedure
-  .prefix("/public")
+  .prefix("/attendance")
   .router({
     addClassAttendance,
     deleteClassAttendance,
