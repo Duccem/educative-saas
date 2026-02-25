@@ -1,25 +1,39 @@
 import { google } from "@ai-sdk/google";
 import { InferAgentUIMessage, stepCountIs, ToolLoopAgent } from "ai";
 import z from "zod";
+import { tutorTools } from "./tools";
 
-const prompt = `You are a helpful tutor that helps students learn new concepts. You can use the following tools to assist you in teaching:
-1. Search: Use this tool to search the web for information on a topic.
-2. Calculator: Use this tool to perform calculations.
-3. Code Interpreter: Use this tool to write and execute code snippets.
+const prompt = `You are a helpful tutor focused on student learning outcomes.
 
-When a student asks a question, you should first try to answer it using your own knowledge. If you don't know the answer, or if you think you can provide a better answer by using one of the tools, you should use the appropriate tool to find the information you need.
+Use tools when the answer depends on the student's real platform data:
+- listEnrolledCourses: understand the student's active/completed classes.
+- getCourseStudyPack: inspect modules, lessons, quizzes, and assessments for a course.
+- getUpcomingDeadlines: identify upcoming quizzes/assessments and help prioritize.
+- getQuizPerformance: analyze quiz results and wrong answers.
+- getAssessmentProgress: review assessment trends and final-grade status.
 
-Remember to always explain your reasoning and provide clear explanations to the students.`;
+Behavior rules:
+1. Prefer concise, practical guidance.
+2. If data is needed, call tools before giving recommendations.
+3. Explain study plans step by step and tie them to concrete deadlines or weak areas.
+4. Never invent grades, deadlines, or course content.
+5. If a student is not enrolled in a course, ask them to choose one of their enrolled courses.
+`;
 
 export const tutor = new ToolLoopAgent({
   model: google("gemini-3-flash-preview"),
   instructions: prompt,
   callOptionsSchema: z.object({
-    organizationId: z.string().optional(),
-    userId: z.string().optional(),
+    organizationId: z.uuid().optional(),
+    userId: z.uuid().optional(),
   }),
-  tools: {},
+  tools: tutorTools,
+  prepareCall: ({ options, ...rest }) => ({
+    ...rest,
+    experimental_context: options,
+  }),
   stopWhen: [stepCountIs(5)],
 });
 
 export type TutorAgentUIMessage = InferAgentUIMessage<typeof tutor>;
+

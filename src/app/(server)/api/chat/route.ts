@@ -3,17 +3,11 @@ import { assistant } from "@/lib/agents/assistant";
 import { tutor } from "@/lib/agents/tutor";
 import { auth } from "@/lib/auth/auth-server";
 import { getSession } from "@/lib/auth/get-session";
-import { createAgentUIStreamResponse, ToolLoopAgent } from "ai";
+import { createAgentUIStreamResponse } from "ai";
 import { headers } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 
-const agents = {
-  tutor,
-  assistant,
-  admin,
-} as const;
-
-type AgentRole = keyof typeof agents;
+type AgentRole = "tutor" | "assistant" | "admin";
 
 export const POST = async (req: NextRequest) => {
   const session = await getSession();
@@ -35,17 +29,51 @@ export const POST = async (req: NextRequest) => {
 
   const { messages, chat_id, role } = await req.json();
 
-  return createAgentUIStreamResponse({
-    agent: agents[role as AgentRole],
-    uiMessages: messages,
-    onFinish: async ({ messages }) => {
-      console.log("Final messages:", messages);
-      console.log("Chat ID:", chat_id);
-    },
-    onError: (error) => {
-      console.error("Error:", error);
-      return "An error occurred while processing your request. Please try again later.";
-    },
-  });
+  const onFinish = async ({ messages }: { messages: unknown[] }) => {
+    console.log("Final messages:", messages);
+    console.log("Chat ID:", chat_id);
+  };
+
+  const onError = (error: unknown) => {
+    console.error("Error:", error);
+    return "An error occurred while processing your request. Please try again later.";
+  };
+
+  const options = {
+    userId: session.user.id,
+    organizationId: organization.id,
+  };
+
+  if (role === "tutor") {
+    return createAgentUIStreamResponse({
+      agent: tutor,
+      uiMessages: messages,
+      options,
+      onFinish,
+      onError,
+    });
+  }
+
+  if (role === "assistant") {
+    return createAgentUIStreamResponse({
+      agent: assistant,
+      uiMessages: messages,
+      options,
+      onFinish,
+      onError,
+    });
+  }
+
+  if (role === "admin") {
+    return createAgentUIStreamResponse({
+      agent: admin,
+      uiMessages: messages,
+      options,
+      onFinish,
+      onError,
+    });
+  }
+
+  return NextResponse.json({ error: "Invalid role" }, { status: 400 });
 };
 
