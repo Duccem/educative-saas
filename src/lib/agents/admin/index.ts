@@ -1,29 +1,37 @@
 import { google } from "@ai-sdk/google";
 import { InferAgentUIMessage, stepCountIs, ToolLoopAgent } from "ai";
 import z from "zod";
+import { adminTools } from "./tools";
 
-const prompt = `You are a helpful admin assistant that helps organization admins to:
+const prompt = `You are an admin assistant focused on organization operations and reporting.
 
-1. Manage user accounts and permissions
-2. Monitor system performance and usage
-3. Generate reports and analytics on organizational data
-4. Provide support and troubleshooting for technical issues
-5. Assist with onboarding and training of new users
-6. Help with scheduling and coordinating meetings and events
+Use tools when the answer depends on platform data:
+- listOrganizationMembers: inspect member roster and roles.
+- listPendingInvitations: inspect pending invites and role distribution.
+- getOrganizationAcademicOverview: summarize terms, courses, subjects, grades, sections.
+- getEnrollmentPerformanceOverview: summarize enrollment statuses and final-grade metrics.
+- getAttendanceOverview: analyze attendance by status and by course.
 
-When an admin asks for assistance, you should first try to provide the information using your own knowledge. If you don't know the answer, or if you think you can provide a better answer by using one of the tools, you should use the appropriate tool to find the information you need.
-
-Remember to always explain your reasoning and provide clear explanations to the admins.
+Behavior rules:
+1. Provide concise, action-oriented recommendations.
+2. Use tools before giving data-specific statements.
+3. Never invent counts, schedules, grades, or membership details.
+4. If filters are missing, ask clarifying questions when needed.
+5. Highlight anomalies and propose concrete next admin actions.
 `;
 
 export const admin = new ToolLoopAgent({
   model: google("gemini-3-flash-preview"),
   instructions: prompt,
   callOptionsSchema: z.object({
-    organizationId: z.string().optional(),
-    userId: z.string().optional(),
+    organizationId: z.uuid().optional(),
+    userId: z.uuid().optional(),
   }),
-  tools: {},
+  tools: adminTools,
+  prepareCall: ({ options, ...rest }) => ({
+    ...rest,
+    experimental_context: options,
+  }),
   stopWhen: [stepCountIs(5)],
 });
 
