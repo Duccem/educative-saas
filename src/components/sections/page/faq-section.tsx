@@ -2,38 +2,22 @@
 
 import { useState } from "react";
 import { Plus } from "lucide-react";
-
-const faqs = [
-  {
-    question: "¿Qué es Educative y cómo funciona?",
-    answer:
-      "Educative es una plataforma integral para instituciones educativas que centraliza la enseñanza online y la gestión académica. Permite administrar cursos, horarios, asistencia, evaluaciones y calificaciones en un solo lugar.",
-  },
-  {
-    question: "¿A quién está dirigida la plataforma?",
-    answer:
-      "Está orientada a escuelas, colegios, academias y centros de formación que desean mejorar su operación académica y ofrecer una experiencia educativa digital más estructurada.",
-  },
-  {
-    question: "¿Qué procesos académicos puedo gestionar en Educative?",
-    answer:
-      "Puedes gestionar períodos académicos, asignaturas, secciones, asistencia, actividades, evaluaciones y reportes de calificaciones para mantener trazabilidad completa del progreso de cada estudiante.",
-  },
-];
+import { useTranslations } from "next-intl";
 
 export function FaqSection() {
+  const t = useTranslations("page.faq");
   const [openIndex, setOpenIndex] = useState<number | null>(null);
+  const faqs = [1, 2, 3].map((index) => ({
+    question: t(`items.${index}.question`),
+    answer: t(`items.${index}.answer`),
+  }));
 
   return (
     <section className="py-24 px-6 bg-background">
       <div className="max-w-5xl mx-auto">
         <div className="grid md:grid-cols-2 gap-12">
           <div>
-            <h2 className="font-serif text-3xl md:text-4xl">
-              Preguntas
-              <br />
-              frecuentes
-            </h2>
+            <h2 className="font-serif text-3xl md:text-4xl">{t("title")}</h2>
           </div>
           <div className="space-y-0">
             {faqs.map((faq, index) => (

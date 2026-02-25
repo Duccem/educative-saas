@@ -1,6 +1,9 @@
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 
 export function Footer() {
+  const t = useTranslations("page.footer");
+
   return (
     <footer className="py-12 px-6 bg-background border-t">
       <div className="max-w-6xl mx-auto">
@@ -10,57 +13,55 @@ export function Footer() {
             href="#"
             className="text-sm hover:text-muted-foreground transition-colors"
           >
-            Instituciones
+            {t("links.institutions")}
           </Link>
           <Link
             href="#"
             className="text-sm hover:text-muted-foreground transition-colors"
           >
-            Planes
+            {t("links.pricing")}
           </Link>
           <Link
             href="#"
             className="text-sm hover:text-muted-foreground transition-colors"
           >
-            Recursos académicos
+            {t("links.academicResources")}
           </Link>
           <Link
             href="#"
             className="text-sm hover:text-muted-foreground transition-colors"
           >
-            Casos institucionales
+            {t("links.institutionalCases")}
           </Link>
           <Link
             href="#"
             className="text-sm hover:text-muted-foreground transition-colors"
           >
-            Nosotros
+            {t("links.about")}
           </Link>
           <Link
             href="#"
             className="text-sm hover:text-muted-foreground transition-colors"
           >
-            Centro de ayuda
+            {t("links.helpCenter")}
           </Link>
         </nav>
 
         {/* Copyright and legal */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-12">
-          <p className="text-sm text-muted-foreground">
-            © 2026 Educative. Todos los derechos reservados.
-          </p>
+          <p className="text-sm text-muted-foreground">{t("copyright")}</p>
           <div className="flex gap-6">
             <Link
               href="#"
               className="text-sm text-muted-foreground hover:text-foreground transition-colors"
             >
-              Términos del servicio
+              {t("legal.terms")}
             </Link>
             <Link
               href="#"
               className="text-sm text-muted-foreground hover:text-foreground transition-colors"
             >
-              Política de privacidad
+              {t("legal.privacy")}
             </Link>
           </div>
         </div>

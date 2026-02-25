@@ -1,0 +1,94 @@
+{
+  "page": {
+    "navigation": {
+      "aria": {
+        "toggleMenu": "Toggle menu",
+        "toggleTheme": "Toggle theme",
+        "toggleLanguage": "Toggle language"
+      },
+      "links": {
+        "institutions": "Institutions",
+        "pricing": "Pricing",
+        "helpCenter": "Help Center"
+      },
+      "language": {
+        "es": "Spanish",
+        "en": "English"
+      },
+      "actions": {
+        "signIn": "Sign in",
+        "requestDemo": "Request demo"
+      }
+    },
+    "hero": {
+      "title": "An all-in-one platform for school management",
+      "description": "Strengthen online education and optimize academic operations with schedule control, attendance, assessments and grading in one place.",
+      "cta": "Request a demo"
+    },
+    "howItWorks": {
+      "badge": "How it works",
+      "title": "The simplest way to modernize your educational institution",
+      "description": "Unify online teaching, academic planning and student performance tracking in a single solution.",
+      "steps": {
+        "1": {
+          "title": "1. Structure your academic operations",
+          "description": "Set up campuses, academic terms, levels and subjects to establish an organized workflow from day one."
+        },
+        "2": {
+          "title": "2. Manage your educational community",
+          "description": "Manage teachers, students and guardians with defined roles for clear and efficient institutional coordination."
+        },
+        "3": {
+          "title": "3. Plan classes with traceability",
+          "description": "Organize schedules, lessons, modules and activities to ensure pedagogical continuity and compliance with the academic plan."
+        },
+        "4": {
+          "title": "4. Assess and monitor outcomes",
+          "description": "Record attendance, run assessments and consolidate grades to support evidence-based academic decisions."
+        }
+      },
+      "step5": {
+        "title": "5. Improve continuously",
+        "description": "Visualize performance indicators, optimize processes and sustainably strengthen educational quality.",
+        "cta": "Schedule a demo"
+      }
+    },
+    "faq": {
+      "title": "Frequently asked questions",
+      "items": {
+        "1": {
+          "question": "What is Educative and how does it work?",
+          "answer": "Educative is an all-in-one platform for educational institutions that centralizes online teaching and academic management. It allows you to manage courses, schedules, attendance, assessments and grades in one place."
+        },
+        "2": {
+          "question": "Who is the platform designed for?",
+          "answer": "It is designed for schools, academies and training centers that want to improve academic operations and offer a more structured digital learning experience."
+        },
+        "3": {
+          "question": "What academic processes can I manage in Educative?",
+          "answer": "You can manage academic terms, subjects, sections, attendance, activities, assessments and grade reports to maintain full traceability of each student's progress."
+        }
+      }
+    },
+    "cta": {
+      "title": "Drive your institution's digital transformation",
+      "description": "Simplify academic management, strengthen the educational experience and improve decision-making with centralized information.",
+      "cta": "Schedule a demo"
+    },
+    "footer": {
+      "links": {
+        "institutions": "Institutions",
+        "pricing": "Pricing",
+        "academicResources": "Academic resources",
+        "institutionalCases": "Institutional cases",
+        "about": "About us",
+        "helpCenter": "Help Center"
+      },
+      "copyright": "© 2026 Educative. All rights reserved.",
+      "legal": {
+        "terms": "Terms of service",
+        "privacy": "Privacy policy"
+      }
+    }
+  }
+}

@@ -1,0 +1,94 @@
+{
+  "page": {
+    "navigation": {
+      "aria": {
+        "toggleMenu": "Alternar menú",
+        "toggleTheme": "Cambiar tema",
+        "toggleLanguage": "Cambiar idioma"
+      },
+      "links": {
+        "institutions": "Instituciones",
+        "pricing": "Planes",
+        "helpCenter": "Centro de ayuda"
+      },
+      "language": {
+        "es": "Español",
+        "en": "Inglés"
+      },
+      "actions": {
+        "signIn": "Iniciar sesión",
+        "requestDemo": "Solicitar demo"
+      }
+    },
+    "hero": {
+      "title": "Una plataforma integral para la gestión escolar",
+      "description": "Fortalece la educación online y optimiza la operación académica con control de horarios, asistencia, evaluaciones y calificaciones en un solo entorno.",
+      "cta": "Solicitar una demostración"
+    },
+    "howItWorks": {
+      "badge": "Cómo funciona",
+      "title": "La forma más simple de modernizar tu institución educativa",
+      "description": "Unifica la enseñanza online, la planificación académica y el seguimiento del desempeño estudiantil en una sola solución.",
+      "steps": {
+        "1": {
+          "title": "1. Estructura tu operación académica",
+          "description": "Configura sedes, períodos académicos, niveles y asignaturas para establecer una base de trabajo ordenada desde el primer día."
+        },
+        "2": {
+          "title": "2. Gestiona tu comunidad educativa",
+          "description": "Administra docentes, estudiantes y responsables con roles definidos para una coordinación institucional clara y eficiente."
+        },
+        "3": {
+          "title": "3. Planifica clases con trazabilidad",
+          "description": "Organiza horarios, lecciones, módulos y actividades para asegurar continuidad pedagógica y cumplimiento del plan académico."
+        },
+        "4": {
+          "title": "4. Evalúa y monitorea resultados",
+          "description": "Registra asistencia, aplica evaluaciones y consolida calificaciones para respaldar decisiones académicas basadas en evidencia."
+        }
+      },
+      "step5": {
+        "title": "5. Mejora continuamente",
+        "description": "Visualiza indicadores de desempeño, optimiza procesos y fortalece la calidad educativa de forma sostenida.",
+        "cta": "Agendar demostración"
+      }
+    },
+    "faq": {
+      "title": "Preguntas frecuentes",
+      "items": {
+        "1": {
+          "question": "¿Qué es Educative y cómo funciona?",
+          "answer": "Educative es una plataforma integral para instituciones educativas que centraliza la enseñanza online y la gestión académica. Permite administrar cursos, horarios, asistencia, evaluaciones y calificaciones en un solo lugar."
+        },
+        "2": {
+          "question": "¿A quién está dirigida la plataforma?",
+          "answer": "Está orientada a escuelas, colegios, academias y centros de formación que desean mejorar su operación académica y ofrecer una experiencia educativa digital más estructurada."
+        },
+        "3": {
+          "question": "¿Qué procesos académicos puedo gestionar en Educative?",
+          "answer": "Puedes gestionar períodos académicos, asignaturas, secciones, asistencia, actividades, evaluaciones y reportes de calificaciones para mantener trazabilidad completa del progreso de cada estudiante."
+        }
+      }
+    },
+    "cta": {
+      "title": "Impulsa la transformación digital de tu institución",
+      "description": "Simplifica la gestión académica, fortalece la experiencia educativa y mejora la toma de decisiones con información centralizada.",
+      "cta": "Agendar demostración"
+    },
+    "footer": {
+      "links": {
+        "institutions": "Instituciones",
+        "pricing": "Planes",
+        "academicResources": "Recursos académicos",
+        "institutionalCases": "Casos institucionales",
+        "about": "Nosotros",
+        "helpCenter": "Centro de ayuda"
+      },
+      "copyright": "© 2026 Educative. Todos los derechos reservados.",
+      "legal": {
+        "terms": "Términos del servicio",
+        "privacy": "Política de privacidad"
+      }
+    }
+  }
+}

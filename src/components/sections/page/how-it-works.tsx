@@ -1,22 +1,22 @@
 import { Button } from "@/components/ui/button";
+import { useTranslations } from "next-intl";
 
 export function HowItWorks() {
+  const t = useTranslations("page.howItWorks");
+
   return (
     <section className="py-24 px-6 bg-background">
       <div className="max-w-6xl mx-auto">
         {/* Section header */}
         <div className="text-center mb-20">
           <span className="inline-block px-4 py-1.5 text-sm border rounded-full mb-6">
-            Cómo funciona
+            {t("badge")}
           </span>
           <h2 className="font-sans text-3xl md:text-4xl lg:text-5xl text-balance">
-            La forma más simple de
-            <br />
-            modernizar tu institución educativa
+            {t("title")}
           </h2>
           <p className="mt-4 text-muted-foreground max-w-xl mx-auto">
-            Unifica la enseñanza online, la planificación académica y el
-            seguimiento del desempeño estudiantil en una sola solución.
+            {t("description")}
           </p>
         </div>
 
@@ -24,11 +24,10 @@ export function HowItWorks() {
         <div className="grid md:grid-cols-2 gap-12 items-center mb-24">
           <div className="order-2 md:order-1">
             <h3 className="font-sans text-2xl md:text-3xl mb-4">
-              1. Estructura tu operación académica
+              {t("steps.1.title")}
             </h3>
             <p className="text-muted-foreground leading-relaxed">
-              Configura sedes, períodos académicos, niveles y asignaturas para
-              establecer una base de trabajo ordenada desde el primer día.
+              {t("steps.1.description")}
             </p>
           </div>
           <div className="order-1 md:order-2">
@@ -43,11 +42,10 @@ export function HowItWorks() {
           </div>
           <div>
             <h3 className="font-sans text-2xl md:text-3xl mb-4">
-              2. Gestiona tu comunidad educativa
+              {t("steps.2.title")}
             </h3>
             <p className="text-muted-foreground leading-relaxed">
-              Administra docentes, estudiantes y responsables con roles
-              definidos para una coordinación institucional clara y eficiente.
+              {t("steps.2.description")}
             </p>
           </div>
         </div>
@@ -56,11 +54,10 @@ export function HowItWorks() {
         <div className="grid md:grid-cols-2 gap-12 items-center mb-24">
           <div className="order-2 md:order-1">
             <h3 className="font-sans text-2xl md:text-3xl mb-4">
-              3. Planifica clases con trazabilidad
+              {t("steps.3.title")}
             </h3>
             <p className="text-muted-foreground leading-relaxed">
-              Organiza horarios, lecciones, módulos y actividades para asegurar
-              continuidad pedagógica y cumplimiento del plan académico.
+              {t("steps.3.description")}
             </p>
           </div>
           <div className="order-1 md:order-2">
@@ -75,12 +72,10 @@ export function HowItWorks() {
           </div>
           <div>
             <h3 className="font-sans text-2xl md:text-3xl mb-4">
-              4. Evalúa y monitorea resultados
+              {t("steps.4.title")}
             </h3>
             <p className="text-muted-foreground leading-relaxed">
-              Registra asistencia, aplica evaluaciones y consolida
-              calificaciones para respaldar decisiones académicas basadas en
-              evidencia.
+              {t("steps.4.description")}
             </p>
           </div>
         </div>
@@ -88,14 +83,13 @@ export function HowItWorks() {
         {/* Step 5 */}
         <div className="text-center mb-16">
           <h3 className="font-sans text-2xl md:text-3xl mb-4">
-            5. Mejora continuamente
+            {t("step5.title")}
           </h3>
           <p className="text-muted-foreground max-w-lg mx-auto mb-6">
-            Visualiza indicadores de desempeño, optimiza procesos y fortalece la
-            calidad educativa de forma sostenida.
+            {t("step5.description")}
           </p>
           <Button className="rounded-full bg-foreground text-background hover:bg-foreground/90 px-6">
-            Agendar demostración
+            {t("step5.cta")}
           </Button>
         </div>
       </div>

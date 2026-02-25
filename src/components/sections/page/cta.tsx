@@ -1,6 +1,9 @@
 import { Button } from "@/components/ui/button";
+import { useTranslations } from "next-intl";
 
 export function Cta() {
+  const t = useTranslations("page.cta");
+
   return (
     <section className="relative py-32 px-6 overflow-hidden">
       {/* Gradient background */}
@@ -8,14 +11,13 @@ export function Cta() {
 
       <div className="relative max-w-3xl mx-auto text-center">
         <h2 className="font-serif text-3xl md:text-4xl lg:text-5xl mb-4">
-          Impulsa la transformación digital de tu institución
+          {t("title")}
         </h2>
         <p className="text-muted-foreground mb-8 max-w-md mx-auto">
-          Simplifica la gestión académica, fortalece la experiencia educativa y
-          mejora la toma de decisiones con información centralizada.
+          {t("description")}
         </p>
         <Button className="rounded-full bg-foreground text-background hover:bg-foreground/90 px-6">
-          Agendar demostración
+          {t("cta")}
         </Button>
       </div>
     </section>

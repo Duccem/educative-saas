@@ -2,15 +2,35 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { Menu, X, Sun, Moon } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { Menu, X, Sun, Moon, Languages } from "lucide-react";
+import { useLocale, useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { useTheme } from "next-themes";
 import { cn } from "@/lib/utils";
+import { type AppLocale } from "@/lib/translation/routing";
 
 export function Header() {
+  const t = useTranslations("page.navigation");
+  const locale = useLocale();
+  const router = useRouter();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const { setTheme, resolvedTheme } = useTheme();
+
+  const handleLocaleChange = (nextLocale: AppLocale) => {
+    if (nextLocale === locale) {
+      return;
+    }
+
+    document.cookie = `NEXT_LOCALE=${nextLocale}; Path=/; Max-Age=31536000; SameSite=Lax`;
+    router.refresh();
+  };
+
+  const toggleLocale = () => {
+    const nextLocale: AppLocale = locale === "es" ? "en" : "es";
+    handleLocaleChange(nextLocale);
+  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -37,7 +57,7 @@ export function Header() {
             type="button"
             className="lg:hidden p-2 text-foreground/80 hover:text-foreground smooth-transition"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
-            aria-label="Toggle menu"
+            aria-label={t("aria.toggleMenu")}
           >
             {isMenuOpen ? (
               <X className="w-5 h-5" />
@@ -58,19 +78,19 @@ export function Header() {
               href="/products"
               className="text-sm tracking-wide text-foreground/70 hover:text-foreground smooth-transition"
             >
-              Instituciones
+              {t("links.institutions")}
             </Link>
             <Link
               href="/"
               className="text-sm tracking-wide text-foreground/70 hover:text-foreground smooth-transition"
             >
-              Planes
+              {t("links.pricing")}
             </Link>
             <Link
               href="/"
               className="text-sm tracking-wide text-foreground/70 hover:text-foreground smooth-transition"
             >
-              Centro de ayuda
+              {t("links.helpCenter")}
             </Link>
           </div>
 
@@ -78,13 +98,21 @@ export function Header() {
 
           {/* Right Actions */}
           <div className="flex items-center gap-2">
-            <Button variant="outline">Iniciar sesión</Button>
-            <Button>Solicitar demo</Button>
+            <Button variant="outline">{t("actions.signIn")}</Button>
+            <Button>{t("actions.requestDemo")}</Button>
+            <Button
+              size={"icon"}
+              onClick={toggleLocale}
+              aria-label={t("aria.toggleLanguage")}
+            >
+              <Languages className="size-4" />
+            </Button>
             <Button
               size={"icon"}
               onClick={() => {
                 setTheme(resolvedTheme === "light" ? "dark" : "light");
               }}
+              aria-label={t("aria.toggleTheme")}
             >
               <Sun className="dark:hidden" />
               <Moon className="hidden dark:block" />
@@ -103,25 +131,25 @@ export function Header() {
               href="/products"
               className="text-sm tracking-wide text-foreground/70 hover:text-foreground smooth-transition"
             >
-              Instituciones
+              {t("links.institutions")}
             </Link>
             <Link
               href="/"
               className="text-sm tracking-wide text-foreground/70 hover:text-foreground smooth-transition"
             >
-              Planes
+              {t("links.pricing")}
             </Link>
             <Link
               href="/"
               className="text-sm tracking-wide text-foreground/70 hover:text-foreground smooth-transition"
             >
-              Centro de ayuda
+              {t("links.helpCenter")}
             </Link>
             <Link
               href="/"
               className="text-sm tracking-wide text-foreground/70 hover:text-foreground smooth-transition"
             >
-              Solicitar demo
+              {t("actions.requestDemo")}
             </Link>
           </div>
         </div>

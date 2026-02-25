@@ -1,20 +1,31 @@
 "use client";
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { type AbstractIntlMessages, NextIntlClientProvider } from "next-intl";
 import { ThemeProvider } from "next-themes";
 import { NuqsAdapter } from "nuqs/adapters/next";
 
 const queryClient = new QueryClient();
 
-export const Providers = ({ children }: { children: React.ReactNode }) => {
+export const Providers = ({
+  children,
+  locale,
+  messages,
+}: {
+  children: React.ReactNode;
+  locale: string;
+  messages: AbstractIntlMessages;
+}) => {
   return (
-    <ThemeProvider attribute={"class"} defaultTheme="system" enableSystem>
-      <NuqsAdapter>
-        <QueryClientProvider client={queryClient}>
-          {children}
-        </QueryClientProvider>
-      </NuqsAdapter>
-    </ThemeProvider>
+    <NextIntlClientProvider locale={locale} messages={messages}>
+      <ThemeProvider attribute={"class"} defaultTheme="system" enableSystem>
+        <NuqsAdapter>
+          <QueryClientProvider client={queryClient}>
+            {children}
+          </QueryClientProvider>
+        </NuqsAdapter>
+      </ThemeProvider>
+    </NextIntlClientProvider>
   );
 };
 
