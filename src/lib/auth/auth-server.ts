@@ -21,6 +21,13 @@ export const auth = betterAuth({
   trustedOrigins: [env.BETTER_AUTH_URL!],
   emailAndPassword: {
     enabled: true,
+    sendResetPassword: async ({ token, url, user }) => {
+      console.log(
+        `Send to ${user.email} the reset password link: ${url}?token=${token}`,
+      );
+    },
+    resetPasswordTokenExpiresIn: 60 * 10,
+    revokeSessionsOnPasswordReset: true,
   },
   socialProviders: {
     google: {
@@ -55,14 +62,6 @@ export const auth = betterAuth({
           );
         },
       },
-    }),
-    emailOTP({
-      otpLength: 6,
-      expiresIn: 10 * 60,
-      sendVerificationOnSignUp: true,
-      allowedAttempts: 5,
-      sendVerificationOTP: async ({ email, otp, type }) =>
-        console.log(`Sended to ${email} the code ${otp} for operation ${type}`),
     }),
     nextCookies(),
     lastLoginMethod(),
