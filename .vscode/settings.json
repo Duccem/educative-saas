@@ -8,5 +8,7 @@
     "**/node_modules": true,
     "**/dist": true,
     "**/.next": true
-  }
+  },
+  "cSpell.words": ["Acad"]
 }
+
