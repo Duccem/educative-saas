@@ -1,13 +1,12 @@
 import { admin } from "@/lib/agents/admin";
 import { assistant } from "@/lib/agents/assistant";
 import { tutor } from "@/lib/agents/tutor";
+import { getChatOfUser, saveChat } from "@/lib/agents/utils";
 import { auth } from "@/lib/auth/auth-server";
 import { getSession } from "@/lib/auth/get-session";
 import { createAgentUIStreamResponse } from "ai";
 import { headers } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
-
-type AgentRole = "tutor" | "assistant" | "admin";
 
 export const POST = async (req: NextRequest) => {
   const session = await getSession();
@@ -29,9 +28,14 @@ export const POST = async (req: NextRequest) => {
 
   const { messages, chat_id, role } = await req.json();
 
-  const onFinish = async ({ messages }: { messages: unknown[] }) => {
-    console.log("Final messages:", messages);
-    console.log("Chat ID:", chat_id);
+  const onFinish = async ({ messages }: { messages: any[] }) => {
+    await saveChat({
+      chatId: chat_id,
+      organizationId: organization.id,
+      userId: session.user.id,
+      agentId: role,
+      messages,
+    });
   };
 
   const onError = (error: unknown) => {
@@ -75,5 +79,42 @@ export const POST = async (req: NextRequest) => {
   }
 
   return NextResponse.json({ error: "Invalid role" }, { status: 400 });
+};
+
+export const GET = async (_req: NextRequest) => {
+  const session = await getSession();
+
+  if (!session) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  const organization = await auth.api.getFullOrganization({
+    headers: await headers(),
+    query: {
+      membersLimit: 0,
+    },
+  });
+
+  if (!organization) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  const chat = await getChatOfUser({
+    organizationId: organization.id,
+    userId: session.user.id,
+  });
+
+  if (!chat) {
+    return NextResponse.json(
+      { error: "No active chat found" },
+      { status: 404 },
+    );
+  }
+
+  return NextResponse.json({
+    chatId: chat.id,
+    agent: chat.agent,
+    messages: chat.messages,
+  });
 };
 

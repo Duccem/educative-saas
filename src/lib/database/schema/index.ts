@@ -5,4 +5,5 @@ export * from "./lesson";
 export * from "./other";
 export * from "./quiz";
 export * from "./schedule";
+export * from "./chat";
 
