@@ -42,7 +42,7 @@ export const SignInForm = () => {
         },
         {
           onSuccess: () => {
-            router.push((callbackURL as any) || "/dashboard");
+            router.push((callbackURL as any) || "/home");
           },
           onError: (error) => {
             console.error("Sign-in error:", error);

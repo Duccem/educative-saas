@@ -29,6 +29,13 @@
       "when": 1771973179220,
       "tag": "0003_conscious_kang",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1772148792402,
+      "tag": "0004_rapid_the_renegades",
+      "breakpoints": true
     }
   ]
 }
