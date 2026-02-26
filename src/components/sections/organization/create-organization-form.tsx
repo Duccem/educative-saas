@@ -60,7 +60,7 @@ export const CreateOrganizationForm = () => {
         form.handleSubmit();
       }}
     >
-      <OrganizationImagePicker onFileSelect={setFile} />
+      <OrganizationImagePicker onFileSelectAction={setFile} />
       <FieldGroup>
         <form.Field name="name">
           {(field) => {

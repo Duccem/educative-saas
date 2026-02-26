@@ -5,12 +5,12 @@ import { useRef, useState } from "react";
 
 type OrganizationImagPickerProps = {
   file?: File;
-  onFileSelect: (file: File) => void;
+  onFileSelectAction: (file: File) => void;
   url?: string;
 };
 
 export const OrganizationImagePicker = ({
-  onFileSelect,
+  onFileSelectAction,
   url,
 }: OrganizationImagPickerProps) => {
   const [imagePreview, setImagePreview] = useState<string | null>(url || null);
@@ -41,7 +41,7 @@ export const OrganizationImagePicker = ({
         ref={fileRef}
         onChange={(e) => {
           if (e.target.files) {
-            onFileSelect(e.target.files[0]);
+            onFileSelectAction(e.target.files[0]);
             const reader = new FileReader();
             reader.onload = (event) => {
               if (event.target?.result) {
