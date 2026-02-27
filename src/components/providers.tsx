@@ -5,6 +5,7 @@ import { type AbstractIntlMessages, NextIntlClientProvider } from "next-intl";
 import { ThemeProvider } from "next-themes";
 import { NuqsAdapter } from "nuqs/adapters/next";
 import { Toaster } from "sonner";
+import { TooltipProvider } from "./ui/tooltip";
 
 const queryClient = new QueryClient();
 
@@ -23,7 +24,7 @@ export const Providers = ({
         <NuqsAdapter>
           <QueryClientProvider client={queryClient}>
             <Toaster />
-            {children}
+            <TooltipProvider>{children}</TooltipProvider>
           </QueryClientProvider>
         </NuqsAdapter>
       </ThemeProvider>
