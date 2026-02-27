@@ -21,6 +21,7 @@ import { sectionRouter } from "@/lib/api/routers/section";
 import { assessmentRouter } from "@/lib/api/routers/assessment";
 import { studentAssessmentGradeRouter } from "@/lib/api/routers/student-assessment-grade";
 import { courseFinalGradeRouter } from "@/lib/api/routers/course-final-grade";
+import { billingRouter } from "@/lib/api/routers/billing";
 
 const apiHandler = new OpenAPIHandler(
   {
@@ -42,6 +43,7 @@ const apiHandler = new OpenAPIHandler(
     assessment: assessmentRouter,
     studentAssessmentGrade: studentAssessmentGradeRouter,
     courseFinalGrade: courseFinalGradeRouter,
+    billing: billingRouter,
   },
   {
     plugins: [
