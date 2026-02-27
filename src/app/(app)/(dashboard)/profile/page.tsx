@@ -1,8 +1,11 @@
-import AccountForm from "@/components/sections/proile/account-form";
+import AccountForm from "@/components/sections/profile/account-form";
+import { DeleteAccount } from "@/components/sections/profile/delete-account";
+import { Notifications } from "@/components/sections/profile/notifications";
+import { Preferences } from "@/components/sections/profile/preferences";
 import { requireAuth } from "@/lib/auth/guards";
 
 export default async function ProfilePage() {
-  const session = await requireAuth();
+  await requireAuth();
 
   return (
     <div className="flex w-full mx-auto flex-col gap-6 pb-10">
@@ -13,11 +16,11 @@ export default async function ProfilePage() {
         </p>
       </div>
       <AccountForm />
-      {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <Preferences />
         <Notifications />
       </div>
-      <DeleteAccount /> */}
+      <DeleteAccount />
     </div>
   );
 }
