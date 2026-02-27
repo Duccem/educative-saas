@@ -1,4 +1,5 @@
 import AccountForm from "@/components/sections/profile/account-form";
+import { ChangePassword } from "@/components/sections/profile/change-password";
 import { DeleteAccount } from "@/components/sections/profile/delete-account";
 import { Notifications } from "@/components/sections/profile/notifications";
 import { Preferences } from "@/components/sections/profile/preferences";
@@ -16,6 +17,7 @@ export default async function ProfilePage() {
         </p>
       </div>
       <AccountForm />
+      <ChangePassword />
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <Preferences />
         <Notifications />
