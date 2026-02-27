@@ -19,6 +19,7 @@ import { Camera, Loader2, Save, X } from "lucide-react";
 import { useRef, useState } from "react";
 import { toast } from "sonner";
 import z from "zod";
+import { useUploadThing } from "@/lib/storage/utils";
 
 export const OrganizationDetails = () => {
   const { data, isPending, refetch } = authClient.useActiveOrganization();
@@ -62,6 +63,7 @@ export const OrganizationDetailsForm = ({
 }: OrganizationDetailsFormProps) => {
   const fileRef = useRef<HTMLInputElement>(null);
   const [file, setFile] = useState<File | null>(null);
+  const { startUpload } = useUploadThing("organizationLogo");
   const form = useForm({
     defaultValues: {
       name: organization.name,
@@ -72,6 +74,13 @@ export const OrganizationDetailsForm = ({
       onSubmit: formSchema,
     },
     onSubmit: async ({ value }) => {
+      let logoUrl = "";
+      if (file) {
+        const res = await startUpload([file]);
+        if (res) {
+          logoUrl = res[0].ufsUrl;
+        }
+      }
       await authClient.organization.update(
         {
           data: {

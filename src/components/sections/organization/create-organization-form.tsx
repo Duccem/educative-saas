@@ -12,12 +12,14 @@ import { Loader2 } from "lucide-react";
 import { authClient } from "@/lib/auth/auth-client";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { useUploadThing } from "@/lib/storage/utils";
 
 const formSchema = z.object({
   name: z.string().min(1, "Organization name is required"),
 });
 export const CreateOrganizationForm = () => {
   const [file, setFile] = useState<File | null>(null);
+  const { startUpload } = useUploadThing("organizationLogo");
   const router = useRouter();
   const form = useForm({
     defaultValues: {
@@ -27,6 +29,13 @@ export const CreateOrganizationForm = () => {
       onSubmit: formSchema,
     },
     onSubmit: async ({ value }) => {
+      let logoUrl = "";
+      if (file) {
+        const res = await startUpload([file]);
+        if (res) {
+          logoUrl = res[0].ufsUrl;
+        }
+      }
       await authClient.organization.create(
         {
           name: value.name,
