@@ -17,6 +17,8 @@
     "@orpc/openapi": "^1.13.5",
     "@orpc/server": "^1.13.5",
     "@orpc/zod": "^1.13.5",
+    "@polar-sh/nextjs": "^0.9.3",
+    "@polar-sh/sdk": "^0.45.1",
     "@t3-oss/env-core": "^0.13.10",
     "@tanstack/react-form": "^1.28.3",
     "@tanstack/react-query": "^5.90.21",

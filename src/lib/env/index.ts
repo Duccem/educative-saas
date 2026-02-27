@@ -8,6 +8,12 @@ export const env = createEnv({
     BETTER_AUTH_URL: z.string(),
     GOOGLE_CLIENT_ID: z.string(),
     GOOGLE_CLIENT_SECRET: z.string(),
+    GOOGLE_GENERATIVE_AI_API_KEY: z.string(),
+    UPLOADTHING_TOKEN: z.string(),
+    POLAR_ACCESS_TOKEN: z.string(),
+    POLAR_SUCCESS_URL: z.string(),
+    POLAR_MODE: z.enum(["sandbox", "production"]),
+    POLAR_WEBHOOK_SECRET: z.string(),
   },
   client: {
     NEXT_PUBLIC_BASE_URL: z.string(),
