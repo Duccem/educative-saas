@@ -3,15 +3,10 @@ import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { database } from "../database";
 import * as schema from "../database/schema/auth";
 import { env } from "../env";
-import {
-  bearer,
-  emailOTP,
-  lastLoginMethod,
-  openAPI,
-  organization,
-} from "better-auth/plugins";
+import { bearer, lastLoginMethod, openAPI, organization } from "better-auth/plugins";
 import { nextCookies } from "better-auth/next-js";
 import { ac, roles } from "./roles";
+import { invitationAccepted, invitationSent, organizationCreated, sendResetPasswordEmail } from "./hooks";
 
 export const auth = betterAuth({
   database: drizzleAdapter(database, {
@@ -21,11 +16,7 @@ export const auth = betterAuth({
   trustedOrigins: [env.BETTER_AUTH_URL!],
   emailAndPassword: {
     enabled: true,
-    sendResetPassword: async ({ token, url, user }) => {
-      console.log(
-        `Send to ${user.email} the reset password link: ${url}?token=${token}`,
-      );
-    },
+    sendResetPassword: async ({ token, url, user }) => sendResetPasswordEmail(user.email, url, token),
     resetPasswordTokenExpiresIn: 60 * 10,
     revokeSessionsOnPasswordReset: true,
   },
@@ -47,20 +38,10 @@ export const auth = betterAuth({
       ac,
       roles,
       creatorRole: "admin",
-      sendInvitationEmail: async ({ email, role }) => {
-        console.log(`Sended to ${email} the invitation for role ${role}`);
-      },
+      sendInvitationEmail: async ({ email, role, invitation }) => invitationSent(email, role, invitation.id),
       organizationHooks: {
-        afterCreateOrganization: async ({ organization, user, member }) => {
-          console.log(
-            `User ${user.id} created the organization ${organization.id} with role ${member.role}`,
-          );
-        },
-        afterAcceptInvitation: async ({ organization, user, member }) => {
-          console.log(
-            `User ${user.id} accepted the invitation for organization ${organization.id} with role ${member.role}`,
-          );
-        },
+        afterCreateOrganization: async ({ organization }) => organizationCreated(organization),
+        afterAcceptInvitation: async ({ organization, user }) => invitationAccepted(organization, user),
       },
     }),
     nextCookies(),

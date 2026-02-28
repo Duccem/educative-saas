@@ -12,24 +12,7 @@ import PricesSheet from "./prices-sheet";
 import { PortalButton } from "./portal-button";
 import { Calendar, Check } from "lucide-react";
 import { format } from "date-fns";
-
-const products = [
-  {
-    productId: "",
-    name: "Free",
-    price: "Free",
-  },
-  {
-    productId: "",
-    name: "Professional",
-    price: "$24.99/month",
-  },
-  {
-    productId: "",
-    name: "Enterprise",
-    price: "$59.99/month",
-  },
-];
+import { products } from "@/lib/payments/products";
 
 export const SubscriptionStatus = () => {
   const { data, isPending } = useQuery({
@@ -88,7 +71,7 @@ const SubscriptionActive = ({ subscription }: { subscription: any }) => {
             {selectedPlan?.price ?? "Free"}
           </div>
         </div>
-        {selectedPlan?.name === "Free" ? <PricesSheet /> : <PortalButton />}
+        {selectedPlan?.id === "free" ? <PricesSheet /> : <PortalButton />}
       </CardHeader>
       <CardContent>
         {subscription ? (
@@ -105,7 +88,7 @@ const SubscriptionActive = ({ subscription }: { subscription: any }) => {
             </p>
           </div>
         ) : null}
-        {selectedPlan?.name === "Free" ? (
+        {selectedPlan?.id === "free" ? (
           <div className="w-full py-4 border-t space-y-2">
             <p className="wrap-break-word   font-semibold">
               What you`ll get if you upgrade:

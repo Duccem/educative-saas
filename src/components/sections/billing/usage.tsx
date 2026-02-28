@@ -1,6 +1,7 @@
 "use client";
 import { Card } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
+import { products } from "@/lib/payments/products";
 import { useQuery } from "@tanstack/react-query";
 
 const PLAN_DATA = {
@@ -10,7 +11,7 @@ const PLAN_DATA = {
       disabled: false,
       unlimited: false,
     },
-    grades: {
+    sections: {
       limit: 10,
       disabled: false,
       unlimited: false,
@@ -27,7 +28,7 @@ const PLAN_DATA = {
       disabled: false,
       unlimited: false,
     },
-    grades: {
+    sections: {
       limit: 20,
       disabled: false,
       unlimited: false,
@@ -44,7 +45,7 @@ const PLAN_DATA = {
       disabled: false,
       unlimited: true,
     },
-    grades: {
+    sections: {
       limit: 100,
       disabled: false,
       unlimited: false,
@@ -56,24 +57,6 @@ const PLAN_DATA = {
     },
   },
 } as const;
-
-export const products = [
-  {
-    productId: "e17755b0-0e97-41d9-a7fc-ad3ed0dd36ae",
-    id: "complete",
-    name: "Enterprise Plan",
-  },
-  {
-    productId: "f36c67f6-4d6c-4522-b954-cd6c97b01be0",
-    id: "basic",
-    name: "Pro Plan",
-  },
-  {
-    productId: "f4b5210a-6677-4de4-a0ec-249d18079b43",
-    slug: "free",
-    name: "Free Plan",
-  },
-];
 
 interface UsageItemProps {
   label: string;
@@ -91,13 +74,7 @@ function CircularProgress({ value }: { value: number }) {
     <div className="relative h-6 w-6 flex items-center justify-center">
       <svg className="h-6 w-6" viewBox="0 0 36 36">
         {/* Background circle */}
-        <circle
-          className="stroke-muted fill-none"
-          cx="18"
-          cy="18"
-          r="16"
-          strokeWidth="4"
-        />
+        <circle className="stroke-muted fill-none" cx="18" cy="18" r="16" strokeWidth="4" />
         {/* Progress circle */}
         <circle
           className="stroke-primary fill-none"
@@ -114,21 +91,9 @@ function CircularProgress({ value }: { value: number }) {
   );
 }
 
-function UsageItem({
-  label,
-  current,
-  max,
-  unit,
-  period,
-  percentage,
-  unlimited,
-  disabled,
-}: UsageItemProps) {
+function UsageItem({ label, current, max, unit, period, percentage, unlimited, disabled }: UsageItemProps) {
   // Calculate percentage if not explicitly provided
-  const calculatedPercentage =
-    percentage !== undefined
-      ? percentage
-      : Math.min((current / max) * 100, 100);
+  const calculatedPercentage = percentage !== undefined ? percentage : Math.min((current / max) * 100, 100);
 
   // Format values differently based on whether we have a unit or not
   let formattedCurrent: string;
@@ -140,8 +105,7 @@ function UsageItem({
     formattedMax = max.toFixed(1).replace(/\.0$/, "");
   } else {
     // For counts without units, use k formatting for large numbers
-    formattedCurrent =
-      current >= 1000 ? `${(current / 1000).toFixed(1)}k` : current.toString();
+    formattedCurrent = current >= 1000 ? `${(current / 1000).toFixed(1)}k` : current.toString();
 
     if (max >= 1000000) {
       // If max is large, format it as well
@@ -157,18 +121,13 @@ function UsageItem({
   return (
     <div className="flex items-center justify-between py-3 px-4">
       <div className="flex items-center gap-4">
-        <CircularProgress
-          value={disabled ? 0 : unlimited ? 0 : calculatedPercentage}
-        />
+        <CircularProgress value={disabled ? 0 : unlimited ? 0 : calculatedPercentage} />
         <span className="text-sm font-medium">{label}</span>
       </div>
-      {unlimited && !disabled && (
-        <span className="text-sm text-muted-foreground">Ilimitados</span>
-      )}
+      {unlimited && !disabled && <span className="text-sm text-muted-foreground">Ilimitados</span>}
       {!unlimited && !disabled && (
         <div className="text-sm text-muted-foreground">
-          {formattedCurrent} / {formattedMax} {unit}{" "}
-          {period && <span>per {period}</span>}
+          {formattedCurrent} / {formattedMax} {unit} {period && <span>per {period}</span>}
         </div>
       )}
       {disabled && (
@@ -188,33 +147,23 @@ export function Usage() {
     queryKey: ["organization-usage-meters"],
     refetchOnWindowFocus: false,
     queryFn: async () => {
-      const response = await fetch("/api/billing/");
+      const response = await fetch("/api/billing");
       const data = await response.json();
       const subscription = data?.state.activeSubscriptions?.[0] || null;
 
-      if (!subscription) {
-        return {
-          plan: "free",
-          meters: {
-            students: 15,
-            grades: 5,
-            ai_usage: 0,
-          },
-          limits: PLAN_DATA["free"],
-        };
-      }
+      const plan = products.find((p) => p.productId === subscription?.productId) ?? products[0];
 
-      const plan = products.find(
-        (p) => p.productId === subscription?.productId,
-      );
+      const usageResponse = await fetch("/api/billing/usage");
+      const usage = await usageResponse.json();
+
       return {
         plan: plan?.name || "free",
         meters: {
-          students: 15,
-          grades: 5,
-          ai_usage: 25000,
+          students: usage.students ?? 0,
+          sections: usage.sections ?? 0,
+          ai_usage: usage.ai_usage ?? 0,
         },
-        limits: PLAN_DATA[plan?.id as keyof typeof PLAN_DATA],
+        limits: PLAN_DATA[plan.id as keyof typeof PLAN_DATA],
       };
     },
   });
@@ -229,9 +178,7 @@ export function Usage() {
 
   return (
     <div>
-      <h2 className="text-lg font-medium leading-none tracking-tight mb-4">
-        Usage
-      </h2>
+      <h2 className="text-lg font-medium leading-none tracking-tight mb-4">Usage</h2>
       <Card className="divide-y ">
         <UsageItem
           label="Maximun students"
@@ -239,15 +186,15 @@ export function Usage() {
           max={data.limits.students.limit}
           disabled={data.limits.students.disabled}
           unlimited={data.limits.students.unlimited}
-          period="month"
+          period=""
         />
         <UsageItem
-          label="Maximun grades"
-          current={data.meters?.grades ?? 0}
-          max={data.limits.grades.limit}
-          disabled={data.limits.grades.disabled}
-          unlimited={data.limits.grades.unlimited}
-          period="month"
+          label="Maximun sections"
+          current={data.meters?.sections ?? 0}
+          max={data.limits.sections.limit}
+          disabled={data.limits.sections.disabled}
+          unlimited={data.limits.sections.unlimited}
+          period=""
         />
         <UsageItem
           label="AI Usage"
@@ -268,16 +215,11 @@ export function UsageSkeleton() {
 
   return (
     <div>
-      <h2 className="text-lg font-medium leading-none tracking-tight mb-4">
-        Usage
-      </h2>
+      <h2 className="text-lg font-medium leading-none tracking-tight mb-4">Usage</h2>
 
       <Card className="divide-y">
         {skeletonItems.map((item) => (
-          <div
-            key={item}
-            className="flex items-center justify-between py-3 px-4"
-          >
+          <div key={item} className="flex items-center justify-between py-3 px-4">
             <div className="flex items-center gap-4">
               <Skeleton className="h-6 w-6 rounded-full" />
               <Skeleton className="h-4 w-24" />

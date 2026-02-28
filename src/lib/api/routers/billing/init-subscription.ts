@@ -1,5 +1,6 @@
 import { polar } from "@/lib/payments/client";
 import { protectedProcedure } from "../..";
+import { products } from "@/lib/payments/products";
 
 export const initSubscription = protectedProcedure
   .route({ method: "POST", path: "/" })
@@ -17,6 +18,10 @@ export const initSubscription = protectedProcedure
       externalId: organization.id,
       email: user.email,
       name: organization.name,
+    });
+    await polar.subscriptions.create({
+      externalCustomerId: organization.id,
+      productId: products[0].productId,
     });
   });
 

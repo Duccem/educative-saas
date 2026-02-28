@@ -9,6 +9,7 @@
     "**/dist": true,
     "**/.next": true
   },
-  "cSpell.words": ["Acad"]
+  "cSpell.words": ["Acad"],
+  "prettier.printWidth": 120
 }
 
