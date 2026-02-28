@@ -5,67 +5,52 @@ import { useQuery } from "@tanstack/react-query";
 
 const PLAN_DATA = {
   free: {
-    reports: {
-      limit: 30,
+    students: {
+      limit: 100,
       disabled: false,
       unlimited: false,
     },
-    triages: {
-      limit: 50,
+    grades: {
+      limit: 10,
       disabled: false,
       unlimited: false,
     },
     ai_usage: {
       limit: 100_000,
-      disabled: false,
-      unlimited: false,
-    },
-    users: {
-      limit: 1,
       disabled: true,
       unlimited: false,
     },
   },
   basic: {
-    reports: {
-      limit: 60,
+    students: {
+      limit: 500,
       disabled: false,
       unlimited: false,
     },
-    triages: {
+    grades: {
+      limit: 20,
+      disabled: false,
+      unlimited: false,
+    },
+    ai_usage: {
+      limit: 100_000_000,
+      disabled: false,
+      unlimited: false,
+    },
+  },
+  complete: {
+    students: {
+      limit: 1000,
+      disabled: false,
+      unlimited: true,
+    },
+    grades: {
       limit: 100,
       disabled: false,
       unlimited: false,
     },
     ai_usage: {
-      limit: 1_000_000,
-      disabled: false,
-      unlimited: false,
-    },
-    users: {
-      limit: 1,
-      disabled: true,
-      unlimited: false,
-    },
-  },
-  complete: {
-    reports: {
-      limit: 30,
-      disabled: false,
-      unlimited: true,
-    },
-    triages: {
-      limit: 50,
-      disabled: false,
-      unlimited: true,
-    },
-    ai_usage: {
       limit: 100_000,
-      disabled: false,
-      unlimited: true,
-    },
-    users: {
-      limit: 1,
       disabled: false,
       unlimited: true,
     },
@@ -76,12 +61,12 @@ export const products = [
   {
     productId: "e17755b0-0e97-41d9-a7fc-ad3ed0dd36ae",
     id: "complete",
-    name: "Complete Plan",
+    name: "Enterprise Plan",
   },
   {
     productId: "f36c67f6-4d6c-4522-b954-cd6c97b01be0",
     id: "basic",
-    name: "Basic Plan",
+    name: "Pro Plan",
   },
   {
     productId: "f4b5210a-6677-4de4-a0ec-249d18079b43",
@@ -211,10 +196,9 @@ export function Usage() {
         return {
           plan: "free",
           meters: {
-            reports: 15,
-            triages: 25,
-            ai_usage: 25000,
-            users: 1,
+            students: 15,
+            grades: 5,
+            ai_usage: 0,
           },
           limits: PLAN_DATA["free"],
         };
@@ -226,10 +210,9 @@ export function Usage() {
       return {
         plan: plan?.name || "free",
         meters: {
-          reports: 15,
-          triages: 25,
+          students: 15,
+          grades: 5,
           ai_usage: 25000,
-          users: 1,
         },
         limits: PLAN_DATA[plan?.id as keyof typeof PLAN_DATA],
       };
@@ -251,19 +234,19 @@ export function Usage() {
       </h2>
       <Card className="divide-y ">
         <UsageItem
-          label="Daily reports"
-          current={data.meters?.reports ?? 0}
-          max={data.limits.reports.limit}
-          disabled={data.limits.reports.disabled}
-          unlimited={data.limits.reports.unlimited}
+          label="Maximun students"
+          current={data.meters?.students ?? 0}
+          max={data.limits.students.limit}
+          disabled={data.limits.students.disabled}
+          unlimited={data.limits.students.unlimited}
           period="month"
         />
         <UsageItem
-          label="AI Triages"
-          current={data.meters?.triages ?? 0}
-          max={data.limits.triages.limit}
-          disabled={data.limits.triages.disabled}
-          unlimited={data.limits.triages.unlimited}
+          label="Maximun grades"
+          current={data.meters?.grades ?? 0}
+          max={data.limits.grades.limit}
+          disabled={data.limits.grades.disabled}
+          unlimited={data.limits.grades.unlimited}
           period="month"
         />
         <UsageItem
@@ -273,13 +256,6 @@ export function Usage() {
           disabled={data.limits.ai_usage.disabled}
           unlimited={data.limits.ai_usage.unlimited}
           period="month"
-        />
-        <UsageItem
-          label="Family Members"
-          current={data.meters?.users ?? 0}
-          max={data.limits.users.limit}
-          disabled={data.limits.users.disabled}
-          unlimited={data.limits.users.unlimited}
         />
       </Card>
     </div>

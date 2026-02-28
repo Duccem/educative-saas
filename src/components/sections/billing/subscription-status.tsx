@@ -15,18 +15,18 @@ import { format } from "date-fns";
 
 const products = [
   {
-    productId: "f4b5210a-6677-4de4-a0ec-249d18079b43",
+    productId: "",
     name: "Free",
     price: "Free",
   },
   {
-    productId: "f36c67f6-4d6c-4522-b954-cd6c97b01be0",
-    name: "Individual",
+    productId: "",
+    name: "Professional",
     price: "$24.99/month",
   },
   {
-    productId: "e17755b0-0e97-41d9-a7fc-ad3ed0dd36ae",
-    name: "Clinic",
+    productId: "",
+    name: "Enterprise",
     price: "$59.99/month",
   },
 ];
@@ -61,14 +61,11 @@ export const SubscriptionStatusSkeleton = () => {
 };
 
 const benefits = [
-  "100 users maximum",
-  "100 GB storage",
-  "Advanced appointment scheduling",
-  "Laboratory management",
-  "Pharmacy management",
-  "Medical records management",
-  "Priority email support",
-  "Basic analytics",
+  "500 students maximum",
+  "+20 grades and sections",
+  "Online classroom access",
+  "Priority support",
+  "Access to Lara Agent AI assistant",
 ];
 
 const SubscriptionActive = ({ subscription }: { subscription: any }) => {
@@ -94,20 +91,22 @@ const SubscriptionActive = ({ subscription }: { subscription: any }) => {
         {selectedPlan?.name === "Free" ? <PricesSheet /> : <PortalButton />}
       </CardHeader>
       <CardContent>
-        <div className="w-full py-4 border-y">
-          <p className="flex items-center gap-2">
-            <Calendar className="size-4 text-neutral-500" />
-            Next billing date
-          </p>
-          <p className="text-sm text-neutral-400">
-            {format(
-              new Date(subscription?.currentPeriodEnd ?? new Date()),
-              "MMMM dd, yyyy",
-            )}
-          </p>
-        </div>
+        {subscription ? (
+          <div className="w-full py-4 border-y">
+            <p className="flex items-center gap-2">
+              <Calendar className="size-4 text-neutral-500" />
+              Next billing date
+            </p>
+            <p className="text-sm text-neutral-400">
+              {format(
+                new Date(subscription?.currentPeriodEnd ?? new Date()),
+                "MMMM dd, yyyy",
+              )}
+            </p>
+          </div>
+        ) : null}
         {selectedPlan?.name === "Free" ? (
-          <div className="w-full py-4 border-y space-y-2">
+          <div className="w-full py-4 border-t space-y-2">
             <p className="wrap-break-word   font-semibold">
               What you`ll get if you upgrade:
             </p>
