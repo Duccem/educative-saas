@@ -1,10 +1,6 @@
 "use client";
 
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@/components/ui/collapsible";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import {
   SidebarGroup,
   SidebarGroupLabel,
@@ -16,85 +12,40 @@ import {
   SidebarMenuSubItem,
 } from "@/components/ui/sidebar";
 import { authClient } from "@/lib/auth/auth-client";
-import {
-  BookOpen,
-  ChevronRight,
-  House,
-  LayoutDashboardIcon,
-  Settings,
-  Sparkles,
-  Users,
-} from "lucide-react";
+import { BookOpen, Building, Calendar, ChevronRight, Coins, Folder, Heart, House, Layers, Users } from "lucide-react";
 import Link from "next/link";
-import { useEffect, useState } from "react";
 
 type MenuItem = {
   title: string;
   url: string;
   icon: React.ComponentType<any>;
-  isActive?: boolean;
-  roles: string[];
   items?: {
     title: string;
     url: string;
   }[];
 };
 
-const menuItems: MenuItem[] = [
-  {
-    title: "Home",
-    url: "/home",
-    icon: House,
-    roles: ["superadmin", "admin", "teacher", "parent", "student"],
-  },
-  {
-    title: "Settings",
-    url: "/settings",
-    icon: Settings,
-    roles: ["superadmin", "admin"],
-    isActive: true,
-    items: [
-      {
-        title: "Workspace",
-        url: "/settings/organization",
-      },
-      {
-        title: "Billing",
-        url: "/settings/billing",
-      },
-      {
-        title: "Team",
-        url: "/settings/team",
-      },
-    ],
-  },
-];
+type MenuGroup = {
+  items: MenuItem[];
+  title: string;
+};
+
+type MenuConfig = {
+  groups: MenuGroup[];
+  role: "admin" | "teacher" | "student" | "parent";
+};
 
 export function SidebarOptions() {
   const { data, isPending } = authClient.useActiveMemberRole();
 
-  const [items, setItems] = useState<MenuItem[]>([]);
-
-  useEffect(() => {
-    if (!isPending && data) {
-      const filteredItems = menuItems.filter((item) =>
-        item.roles.includes(data.role as string),
-      );
-      setItems(filteredItems);
-    }
-  }, [isPending, data]);
-
-  if (isPending) {
+  if (isPending || !data) {
     return (
       <SidebarGroup>
         <SidebarGroupLabel>Platform</SidebarGroupLabel>
         <SidebarMenu>
           {Array.from({ length: 5 }).map((_, index) => (
             <SidebarMenuItem key={index}>
-              <SidebarMenuButton
-                size="lg"
-                className="cursor-not-allowed opacity-50"
-              >
+              <SidebarMenuButton size="lg" className="cursor-not-allowed opacity-50">
                 <div className="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg">
                   ...
                 </div>
@@ -109,61 +60,145 @@ export function SidebarOptions() {
     );
   }
 
+  const selectedConfig = configs.find((conf) => conf.role === data.role) ?? configs[0];
   return (
-    <SidebarGroup>
-      <SidebarGroupLabel>Platform</SidebarGroupLabel>
-      <SidebarMenu>
-        {items.map((item) => (
-          <Collapsible
-            key={item.title}
-            render={() => (
-              <SidebarMenuItem>
-                {!item.items ? (
-                  <SidebarMenuButton tooltip={item.title}>
-                    <Link
-                      href={item.url as any}
-                      className="flex items-center gap-2 w-full"
-                    >
-                      {item.icon && <item.icon />}
-                      <span>{item.title}</span>
-                    </Link>
-                  </SidebarMenuButton>
-                ) : (
-                  <>
-                    <CollapsibleTrigger
-                      render={
-                        <SidebarMenuButton tooltip={item.title}>
+    <>
+      {selectedConfig.groups.map((c, i) => (
+        <SidebarGroup key={c.title + i}>
+          <SidebarGroupLabel>{c.title.toUpperCase()}</SidebarGroupLabel>
+          <SidebarMenu>
+            {c.items.map((item) => (
+              <Collapsible
+                key={item.title}
+                render={() => (
+                  <SidebarMenuItem>
+                    {!item.items ? (
+                      <SidebarMenuButton tooltip={item.title}>
+                        <Link href={item.url as any} className="flex items-center gap-2 w-full">
                           {item.icon && <item.icon />}
                           <span>{item.title}</span>
-                          <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
-                        </SidebarMenuButton>
-                      }
-                    />
-                    <CollapsibleContent>
-                      <SidebarMenuSub>
-                        {item.items?.map((subItem) => (
-                          <SidebarMenuSubItem key={subItem.title}>
-                            <SidebarMenuSubButton
-                              render={
-                                <Link href={subItem.url as any}>
-                                  <span>{subItem.title}</span>
-                                </Link>
-                              }
-                            />
-                          </SidebarMenuSubItem>
-                        ))}
-                      </SidebarMenuSub>
-                    </CollapsibleContent>
-                  </>
+                        </Link>
+                      </SidebarMenuButton>
+                    ) : (
+                      <>
+                        <CollapsibleTrigger
+                          render={
+                            <SidebarMenuButton tooltip={item.title}>
+                              {item.icon && <item.icon />}
+                              <span>{item.title}</span>
+                              <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
+                            </SidebarMenuButton>
+                          }
+                        />
+                        <CollapsibleContent>
+                          <SidebarMenuSub>
+                            {item.items?.map((subItem) => (
+                              <SidebarMenuSubItem key={subItem.title}>
+                                <SidebarMenuSubButton
+                                  render={
+                                    <Link href={subItem.url as any}>
+                                      <span>{subItem.title}</span>
+                                    </Link>
+                                  }
+                                />
+                              </SidebarMenuSubItem>
+                            ))}
+                          </SidebarMenuSub>
+                        </CollapsibleContent>
+                      </>
+                    )}
+                  </SidebarMenuItem>
                 )}
-              </SidebarMenuItem>
-            )}
-            defaultOpen={item.isActive}
-            className="group/collapsible"
-          />
-        ))}
-      </SidebarMenu>
-    </SidebarGroup>
+                className="group/collapsible"
+              />
+            ))}
+          </SidebarMenu>
+        </SidebarGroup>
+      ))}
+    </>
   );
 }
+
+const adminMenuConfig: MenuConfig = {
+  role: "admin",
+  groups: [
+    {
+      title: "Management",
+      items: [
+        {
+          title: "Home",
+          url: "/home",
+          icon: House,
+        },
+        {
+          title: "Academic terms",
+          url: "/terms",
+          icon: Calendar,
+        },
+        {
+          title: "Subjects",
+          url: "/subjects",
+          icon: Folder,
+        },
+        {
+          title: "Courses",
+          url: "/courses",
+          icon: BookOpen,
+        },
+        {
+          title: "Grades",
+          url: "/grades",
+          icon: Layers,
+        },
+        {
+          title: "Parents",
+          url: "/parents",
+          icon: Heart,
+        },
+        {
+          title: "Students",
+          url: "/students",
+          icon: Users,
+        },
+      ],
+    },
+    {
+      title: "Configuration",
+      items: [
+        {
+          title: "Workspace",
+          url: "/settings/organization",
+          icon: Building,
+        },
+        {
+          title: "Billing",
+          url: "/settings/billing",
+          icon: Coins,
+        },
+        {
+          title: "Team",
+          url: "/settings/team",
+          icon: Users,
+        },
+      ],
+    },
+  ],
+};
+
+const teacherMenuConfig: MenuConfig = {
+  role: "teacher",
+  groups: [],
+};
+
+const parentMenuConfig: MenuConfig = {
+  role: "parent",
+  groups: [],
+};
+
+const studentMenuConfig: MenuConfig = {
+  role: "student",
+  groups: [],
+};
+
+const configs = [adminMenuConfig, teacherMenuConfig, parentMenuConfig, studentMenuConfig];
 
